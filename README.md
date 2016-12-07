@@ -23,14 +23,14 @@ If you only want to prepare an SD card and run the tested Caribou Release on you
 
 This layer depends on:
 
-  URI: git://git.openembedded.org/bitbake
+ * URI: git://git.openembedded.org/bitbake  
   branch: master
 
-  URI: git://git.openembedded.org/openembedded-core
+ * URI: git://git.openembedded.org/openembedded-core  
   layers: meta
   branch: master
 
-  URI: git://git.yoctoproject.org/meta-xilinx
+ * URI: git://git.yoctoproject.org/meta-xilinx  
   branch: master
 
 ### Preparation
@@ -42,11 +42,11 @@ This layer depends on:
 
 * Install this caribou layer
   ```
-  $ git clone git clone ssh://git@gitlab.cern.ch:7999/Caribou/meta-caribou.gi
+  $ git clone git clone ssh://git@gitlab.cern.ch:7999/Caribou/meta-caribou.git
   ```
 
 In order to use the caribou layer, you need to make the build system aware of
-it. Moreover, you need to install and add all the dependency layers. Thus from `meta-caribou/scripts` call the script:
+it. Moreover, you need to install and add all the dependency layers. Thus, from `meta-caribou/scripts` call the script:
   ```
   $ ./addCaribouLayer.sh
   ```
@@ -59,7 +59,7 @@ $ cd poky/
 $ source oe-init-build-env
 ```
 
-Run the build from the `build/` directory using `bitbake` and the selected target, in this case a `caribou-image` distribution:
+Run the build from the `build/` directory using `bitbake` and the selected target, in this case a `caribou-image`:
 
 ```
 $ bitbake caribou-image
