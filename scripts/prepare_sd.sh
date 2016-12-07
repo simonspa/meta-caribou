@@ -9,7 +9,8 @@ read SD_EXT
 echo "Please enter desired MAC address (using colons as separator): "
 read ETH_ADDR
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+echo "Please enter absoulte path to the build directory: "
+read DIR
 IMAGES=tmp/deploy/images/zc706-zynq7
 
 ORANGE='\033[0;33m'
@@ -25,8 +26,8 @@ cp -v $DIR/$IMAGES/uImage $SD_FAT/
 cp -v $DIR/$IMAGES/uImage-zynq-zc706.dtb $SD_FAT/
 
 printf "${ORANGE}Installing Root Filesystem...${NC}\n"
-cp -v $DIR/$IMAGES/core-image-full-cmdline-zc706-zynq7.cpio.gz.u-boot $SD_FAT/
-sudo tar x -C $SD_EXT -f $DIR/$IMAGES/core-image-full-cmdline-zc706-zynq7.tar.gz
+cp -v $DIR/$IMAGES/caribou-image-zc706-zynq7.cpio.gz.u-boot $SD_FAT/
+sudo tar x -C $SD_EXT -f $DIR/$IMAGES/caribou-image-zc706-zynq7.tar.gz
 
 read -p "Rewriting uEnv file? " -n 1 -r
 printf "\n"
@@ -43,4 +44,5 @@ uenvcmd=fatload mmc 0 0x3000000 \${kernel_image} && fatload mmc 0 0x2A00000 \${d
 fi
 
 printf "${GREEN}Done.\n"
+printf "${NC}\n"
 
