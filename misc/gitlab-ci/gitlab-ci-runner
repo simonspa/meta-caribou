@@ -1,0 +1,94 @@
+#!/bin/sh
+#
+# /etc/init.d/gitlab-ci-runner
+# Subsystem file for gitlab-ci-runner on Poky embedded linux
+#
+# chkconfig: 2345 95 05
+# description: gitlab-ci-runner daemon
+#
+# processname: gitlab-ci-multi-runner
+# config: /etc/gitlab-runner/config.toml
+PIDFILE=/var/run/gitlab-ci-multi-runner.pid
+BINARY=/usr/local/bin/gitlab-ci-multi-runner
+
+# source function library
+. /etc/init.d/functions
+
+# pull in sysconfig settings
+[ -f /etc/sysconfig/gitlab-ci-runner ] && . /etc/sysconfig/gitlab-ci-runner
+
+RETVAL=0
+prog="gitlab-ci-multi-runner"
+
+start() {
+    # Return
+    #   0 if daemon has been started
+    #   1 if daemon was already running
+    #   2 if daemon could not be started
+
+    echo -n $"Starting $prog: "
+    start-stop-daemon --start -b -u gitlab-runner --chdir /home/gitlab-runner --pidfile $PIDFILE --make-pidfile --exec $BINARY -- run
+    RETVAL=$?
+
+    case "$RETVAL" in
+	0) echo "[OK]" ;;
+	*) echo "[Failed]" ;;
+    esac
+    
+    [ "$RETVAL" = 0 ] && touch /var/lock/subsys/$prog
+    echo
+}
+
+stop() {
+    # Return
+    #   0 if daemon has been stopped
+    #   1 if daemon was already stopped
+    #   2 if daemon could not be stopped
+    #   other if a failure occurred
+
+    echo -n $"Stopping $prog: "
+    start-stop-daemon --stop --pidfile $PIDFILE
+    RETVAL=$?
+
+    case "$RETVAL" in
+	0) echo "[OK]" ;;
+	*) echo "[Failed]" ;;
+    esac
+
+    [ "$RETVAL" = 0 ] && rm -f /var/lock/subsys/$prog
+    echo
+}
+
+case "$1" in
+    start)
+	start
+	;;
+    stop)
+	stop
+	;;
+    restart)
+	stop
+	start
+	;;
+    status)
+	# Return 
+	#   0 if daemon is running.
+	#   1 if daemon is not running and the pid file exists.
+	#   3 if daemon is not running.
+	#   4 if unable to determine program status.
+
+	echo -n $"Status of $prog: "
+	start-stop-daemon --status --pidfile $PIDFILE
+	RETVAL=$?
+
+	case "$RETVAL" in
+	    0) echo "[Running]" ;;
+	    1|3) echo "[Not running]" ;;
+	    4) echo "[Unknown]" ;;
+	esac
+	;;
+    *)
+	echo $"Usage: $0 {start|stop|restart|status}"
+	RETVAL=1
+esac
+exit $RETVAL
