@@ -23,18 +23,15 @@ If you only want to prepare an SD card and run the tested Caribou Release on you
 
 This layer depends on:
 
- * URI: git://git.yoctoproject.org/poky
-   tag: krogoth-15.0.2
+ * URI: git://git.yoctoproject.org/poky tag: krogoth-15.0.2
 
- * URI: git://git.yoctoproject.org/meta-xilinx  
-   tag: krogoth
+ * URI: git://git.yoctoproject.org/meta-xilinx branch: krogoth
 
 ### Preparation
 
 * Install the latest version of yocto and switch to the supported tag
   ```
-  $ git clone git://git.yoctoproject.org/poky
-  $ git checkout tags/krogoth-15.0.2
+  $ git clone --branch krogoth-15.0.2 git://git.yoctoproject.org/poky
   ```
 * Install this caribou layer
   ```
