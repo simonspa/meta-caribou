@@ -39,15 +39,16 @@ This layer depends on:
   ```
   $ git clone git://git.yoctoproject.org/poky
   ```
-
 * Install this caribou layer
   ```
-  $ git clone git clone ssh://git@gitlab.cern.ch:7999/Caribou/meta-caribou.git
+  $ cd poky/
+  $ git clone ssh://git@gitlab.cern.ch:7999/Caribou/meta-caribou.git
   ```
 
 In order to use the caribou layer, you need to make the build system aware of
 it. Moreover, you need to install and add all the dependency layers. Thus, from `meta-caribou/scripts` call the script:
   ```
+  $ cd meta-caribou/scripts/
   $ ./addCaribouLayer.sh
   ```
 
