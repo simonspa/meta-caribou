@@ -2,7 +2,7 @@
 cd ../../
 
 #Clone repositirues of the required layers
-git clone git://git.yoctoproject.org/meta-xilinx
+git clone --branch krogoth git://git.yoctoproject.org/meta-xilinx
 
 #Set up bitbake
 . oe-init-build-env
