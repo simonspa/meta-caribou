@@ -25,6 +25,9 @@ printf "${ORANGE}Installing Kernel and Device Tree...${NC}\n"
 cp -v $DIR/$IMAGES/uImage $SD_FAT/
 cp -v $DIR/$IMAGES/uImage-zynq-zc706.dtb $SD_FAT/
 
+printf "${ORANGE}Installing FPGA BIT-file....${NC}\n"
+cp -v $DIR/$IMAGES/download.bit $SD_FAT/
+
 printf "${ORANGE}Installing Root Filesystem...${NC}\n"
 cp -v $DIR/$IMAGES/caribou-image-zc706-zynq7.cpio.gz.u-boot $SD_FAT/
 sudo tar x -C $SD_EXT -f $DIR/$IMAGES/caribou-image-zc706-zynq7.tar.gz
