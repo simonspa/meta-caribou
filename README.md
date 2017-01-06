@@ -62,20 +62,18 @@ $ bitbake caribou-image
 
 The output files will be located at `build/tmp/deploy/images/zc706-zynq7/` and can be copied to the appropriate locations on the SD card using the tool described below.
 
+### MAC address
+In order to set the MAC address of the Caribou board other than default (00:0A:35:00:01:23), one shold modify first line in the `uEnv.txt` file located on the `boot` partition of the SD card.
 
 ## Additional tools
 
 ### `prepare_sd.sh`
 
-Copies the build output files to the correct location on the SD card and prepares the environment configuration for the U-Boot bootloader following the initial instructions found [here](https://github.com/Xilinx/meta-xilinx/blob/master/README.booting.md#preparing-sdmmc).
+The tool prepares SD card. Make sure that all partitions are unmounted before callint the script.
 
-Before running the tool, the SD card should be prepared with two partitions:
-* The first partition should be of type FAT16 (vfat) and have a size of about 1G
-* The second partition should be of type ext4 and span the rest of the available space
+The tool asks for a block device of the SD card reader (i.e. /dev/mmcblk0), not device associated with a partition (i.e. /dev/mmcbk0p1).
 
-With both partitions mounted, the tool can be executed. It asks for the absolute paths of both partitions as well as the desired MAC address of the 1GbE network interface. Enter the MAC address with capitalized letters and a colon as separator.
-
-The tool will copy all files to the SD card and will eventually as whether to overwrite the `uEnv.sh` file. For fresh installations, always choose "yes". Skipping this step would allow the preservation of manual changes to the file such as an altered MAC address.
+The prepared SD card contains two [partitions](https://github.com/Xilinx/meta-xilinx/blob/master/README.booting.md#preparing-sdmmc): `boot` and `root`.
 
 ### `femtocom.sh`
 
