@@ -69,9 +69,9 @@ In order to set the MAC address of the Caribou board other than default (00:0A:3
 
 ### `prepare_sd.sh`
 
-The tool prepares SD card. Make sure that all partitions are unmounted before callint the script.
+The tool prepares SD card. Make sure that all partitions are unmounted before calling the script.
 
-The tool asks for a block device of the SD card reader (i.e. /dev/mmcblk0), not device associated with a partition (i.e. /dev/mmcbk0p1).
+The tool asks for a root block device of the SD card reader (i.e. /dev/mmcblk0), not device associated with a partition (i.e. /dev/mmcbk0p1).
 
 The prepared SD card contains two [partitions](https://github.com/Xilinx/meta-xilinx/blob/master/README.booting.md#preparing-sdmmc): `boot` and `root`.
 
