@@ -1,0 +1,81 @@
+From 3ec733505ee2dda7bf7bfda45a5f07f9d5de69ae Mon Sep 17 00:00:00 2001
+From: Adrian Fiergolski <adrian.fiergolski@cern.ch>
+Date: Tue, 17 Jan 2017 14:19:19 +0100
+Subject: [PATCH 1/2] Add support for CaR I2C chains.
+
+Signed-off-by: Adrian Fiergolski <adrian.fiergolski@cern.ch>
+---
+ arch/arm/boot/dts/zynq-zc706.dts | 57 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+
+diff --git a/arch/arm/boot/dts/zynq-zc706.dts b/arch/arm/boot/dts/zynq-zc706.dts
+index a947d39..4c72716 100644
+--- a/arch/arm/boot/dts/zynq-zc706.dts
++++ b/arch/arm/boot/dts/zynq-zc706.dts
+@@ -139,6 +139,63 @@
+ 			};
+ 		};
+ 
++		//HPC
++		i2c@5 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <5>;
++		       	i2cswitch_hpc@71 {
++				    	 compatible = "nxp,pca9846";
++					 #address-cells = <1>;
++				    	 #size-cells = <0>;
++				    	 reg = <0x71>;
++
++					 i2c_hpc@0 {
++					 	compatible = "nxp,pca9846";
++					 	#address-cells = <1>;
++					 	#size-cells = <0>;
++					 	reg = <0>;
++
++					 	hpc_caribou_sources_enable@76  {
++				    	 				       compatible= "nxp,pca9539";
++					 				       #address-cells = <1>;
++					 				       #size-cells = <0>;
++					 				       reg = <0x76>; 
++					    	};
++					 };
++			};
++
++		};
++
++		//LPC
++		i2c@6 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <6>;
++		       	i2cswitch_lpc@71 {
++
++				    	 compatible = "nxp,pca9846";
++					 #address-cells = <1>;
++				    	 #size-cells = <0>;
++				    	 reg = <0x71>;
++
++					 i2c_lpc@0 {
++					 	compatible = "nxp,pca9846";
++					 	#address-cells = <1>;
++					 	#size-cells = <0>;
++					 	reg = <0>;
++
++					 	hpc_caribou_sources_enable@76  {
++				    	 				       compatible= "nxp,pca9539";
++					 				       #address-cells = <1>;
++					 				       #size-cells = <0>;
++					 				       reg = <0x76>;
++					    	};
++					 };
++			};
++
++		};
++
+ 		i2c@7 {
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+-- 
+2.9.3
+
