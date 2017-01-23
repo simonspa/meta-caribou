@@ -1,4 +1,4 @@
-From feeb6080b55c854bd9ac3057b567c3736a57eddb Mon Sep 17 00:00:00 2001
+From 22fcba44b3e3e34bb350ba9f0f138a8d54d284e0 Mon Sep 17 00:00:00 2001
 From: Adrian Fiergolski <adrian.fiergolski@cern.ch>
 Date: Tue, 17 Jan 2017 19:18:25 +0100
 Subject: [PATCH 2/2] Add support for I2C PCA984x family (switch/multiplexers).

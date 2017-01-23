@@ -1,18 +1,18 @@
-From 3ec733505ee2dda7bf7bfda45a5f07f9d5de69ae Mon Sep 17 00:00:00 2001
+From a121d27d3d933a0daae083688135dc0b6f22a4e2 Mon Sep 17 00:00:00 2001
 From: Adrian Fiergolski <adrian.fiergolski@cern.ch>
 Date: Tue, 17 Jan 2017 14:19:19 +0100
 Subject: [PATCH 1/2] Add support for CaR I2C chains.
 
 Signed-off-by: Adrian Fiergolski <adrian.fiergolski@cern.ch>
 ---
- arch/arm/boot/dts/zynq-zc706.dts | 57 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ arch/arm/boot/dts/zynq-zc706.dts | 43 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
 diff --git a/arch/arm/boot/dts/zynq-zc706.dts b/arch/arm/boot/dts/zynq-zc706.dts
-index a947d39..4c72716 100644
+index a947d39..b42dc8b 100644
 --- a/arch/arm/boot/dts/zynq-zc706.dts
 +++ b/arch/arm/boot/dts/zynq-zc706.dts
-@@ -139,6 +139,63 @@
+@@ -139,6 +139,49 @@
  			};
  		};
  
@@ -32,13 +32,6 @@ index a947d39..4c72716 100644
 +					 	#address-cells = <1>;
 +					 	#size-cells = <0>;
 +					 	reg = <0>;
-+
-+					 	hpc_caribou_sources_enable@76  {
-+				    	 				       compatible= "nxp,pca9539";
-+					 				       #address-cells = <1>;
-+					 				       #size-cells = <0>;
-+					 				       reg = <0x76>; 
-+					    	};
 +					 };
 +			};
 +
@@ -61,13 +54,6 @@ index a947d39..4c72716 100644
 +					 	#address-cells = <1>;
 +					 	#size-cells = <0>;
 +					 	reg = <0>;
-+
-+					 	hpc_caribou_sources_enable@76  {
-+				    	 				       compatible= "nxp,pca9539";
-+					 				       #address-cells = <1>;
-+					 				       #size-cells = <0>;
-+					 				       reg = <0x76>;
-+					    	};
 +					 };
 +			};
 +
