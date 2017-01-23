@@ -1,4 +1,4 @@
-From d14bab342288defda8ee351c646a9a4497a51cf6 Mon Sep 17 00:00:00 2001
+From feeb6080b55c854bd9ac3057b567c3736a57eddb Mon Sep 17 00:00:00 2001
 From: Adrian Fiergolski <adrian.fiergolski@cern.ch>
 Date: Tue, 17 Jan 2017 19:18:25 +0100
 Subject: [PATCH 2/2] Add support for I2C PCA984x family (switch/multiplexers).
@@ -9,9 +9,9 @@ Signed-off-by: Adrian Fiergolski <adrian.fiergolski@cern.ch>
  drivers/i2c/muxes/Makefile                         |   2 +-
  drivers/i2c/muxes/i2c-mux-pca9541.c                |   4 +-
  drivers/i2c/muxes/i2c-mux-pca954x.c                | 313 --------------
- drivers/i2c/muxes/i2c-mux-pca9x4x.c                | 464 +++++++++++++++++++++
+ drivers/i2c/muxes/i2c-mux-pca9x4x.c                | 479 +++++++++++++++++++++
  include/linux/i2c/{pca954x.h => pca9x4x.h}         |  13 +-
- 6 files changed, 476 insertions(+), 323 deletions(-)
+ 6 files changed, 491 insertions(+), 323 deletions(-)
  rename Documentation/devicetree/bindings/i2c/{i2c-mux-pca954x.txt => i2c-mux-pca9x4x.txt} (90%)
  delete mode 100644 drivers/i2c/muxes/i2c-mux-pca954x.c
  create mode 100644 drivers/i2c/muxes/i2c-mux-pca9x4x.c
@@ -390,10 +390,10 @@ index acfcef3..0000000
 -MODULE_LICENSE("GPL v2");
 diff --git a/drivers/i2c/muxes/i2c-mux-pca9x4x.c b/drivers/i2c/muxes/i2c-mux-pca9x4x.c
 new file mode 100644
-index 0000000..38f1f14
+index 0000000..6892dde
 --- /dev/null
 +++ b/drivers/i2c/muxes/i2c-mux-pca9x4x.c
-@@ -0,0 +1,464 @@
+@@ -0,0 +1,479 @@
 +/*
 + * I2C multiplexer
 + *
@@ -461,10 +461,10 @@ index 0000000..38f1f14
 +	pca_9547,
 +	pca_9548,
 +
-+	pca_9846 =  0x10B,
-+	pca_9847 =  0x108,
-+	pca_9848 =  0x10A,
-+	pca_9849 =  0x109
++	pca_9846,
++	pca_9847,
++	pca_9848,
++	pca_9849,
 +};
 +
 +struct pca9x4x {
@@ -481,6 +481,7 @@ index 0000000..38f1f14
 +		pca9x4x_ismux = 0,
 +		pca9x4x_isswi
 +	} muxtype;
++        u16 deviceID; // used by PCA984x family only
 +};
 +
 +/* Provide specs for the PCA9x4x types we know about */
@@ -518,21 +519,25 @@ index 0000000..38f1f14
 +	[pca_9846] = {
 +		.nchans = 4,
 +		.muxtype = pca9x4x_isswi,
++		.deviceID = 0x10B,
 +	},
 +	
 +	[pca_9847] = {
 +		.nchans = 8,
 +		.muxtype = pca9x4x_ismux,
++		.deviceID = 0x108,
 +	},
 +
 +	[pca_9848] = {
 +		.nchans = 8,
 +		.muxtype = pca9x4x_isswi,
++		.deviceID = 0x10A,
 +	},
 +
 +	[pca_9849] = {
 +		.nchans = 4,
 +		.muxtype = pca9x4x_ismux,
++		.deviceID = 0x109,
 +	},
 +
 +
@@ -653,6 +658,8 @@ index 0000000..38f1f14
 +  struct pca9x4x *data =  i2c_get_clientdata(client);
 +  union i2c_smbus_data device_id_raw;  
 +  u16 manufacturer_id; //12 bits
++  u16 device_id; //9 bits
++  u16 i; //iterator through chips table
 +  
 +  if ( !i2c_check_functionality(adap, I2C_FUNC_SMBUS_WRITE_BYTE_DATA) ){
 +    dev_warn(&client->dev, "PCA9846 family: I2c adapter doesn't support I2C_FUNC_SMBUS_WRITE_BYTE_DATA");
@@ -698,11 +705,19 @@ index 0000000..38f1f14
 +  }
 +
 +  //Device ID (9 bits)
-+  data->type = ( (u16) device_id_raw.block[2] << 5 ) | (device_id_raw.block[3] >> 3);
-+
++  device_id = ( (u16) device_id_raw.block[2] << 5 ) | (device_id_raw.block[3] >> 3);
++  for(i = 0; i < sizeof(chips)/sizeof(chips[0]); i++){
++    if(device_id == chips[i].deviceID)
++      data -> type = i;
++  }
++  if(! data -> type) {
++    dev_warn(&client->dev, "PCA9846 family: DeviceID %x is not supported.\n", device_id );
++    return -ENODEV;
++  }
++    
 +  //Check if it correponds to device tree
 +  if(  id->driver_data != data -> type ){
-+    dev_notice(&client->dev, "PCA9846 family: Actual device part ID %h does not match device tree description %h - continuing anyway.\n",
++    dev_notice(&client->dev, "PCA9846 family: Actual device part ID %x does not match device tree description %x - continuing anyway.\n",
 +	       data -> type,  id->driver_data);
 +  }
 +
