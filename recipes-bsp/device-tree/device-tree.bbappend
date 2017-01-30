@@ -1,14 +1,24 @@
-SRC_URI = "git://git@gitlab.cern.ch:7999/Caribou/peary-firmware.git;protocol=ssh;"
-SRCREV = "447ca4e0ec5e5844b3882541f39f1d0a622637e6"
+FILESEXTRAPATHS_prepend := "${THISDIR}/patches:"
+SRC_URI = "git://git@gitlab.cern.ch:7999/Caribou/peary-firmware.git;protocol=ssh; \
+	  file://0001-Extend-peary-firmware-device-tree-generated-by-Vivad.patch \
+	"
+SRCREV = "master"
 
 PV = "+git${SRCPV}"
 
-MACHINE_DEVICETREE_prepend = " \
-			   git/outputs/system.dts \
-			   git/outputs/skeleton.dtsi \
-			   git/outputs/zynq-7000.dtsi \
+S = "${WORKDIR}/git"
+
+KERNEL_DTS_INCLUDE_caribou-zynq7 = "\
+			git/outputs/dts \
+			"		
+
+MACHINE_DEVICETREE_caribou-zynq7 = " \
+			   git/outputs/dts/system.dts \
+			   git/outputs/dts/skeleton.dtsi \
+			   git/outputs/dts/zynq-7000.dtsi \
+			   git/outputs/dts/pl.dtsi \
 			   "
 
-DEVICETREE = "${@os.path.join( d.getVar("WORKDIR", True), 'git/outputs/system.dts' ) }"
+#DEVICETREE = "${@os.path.join( d.getVar("WORKDIR", True), 'git/outputs/system.dts' ) }"
 
 
