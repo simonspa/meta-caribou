@@ -7,8 +7,10 @@ DEPENDS += "unzip"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta-caribou/COPYING.MIT;md5=838c366f69b72c5df05c96dff79b35f2"
 
+COMPATIBLE_MACHINE = "caribou-zynq7"
+
 SRC_URI = "git://git@gitlab.cern.ch:7999/Caribou/peary-firmware.git;protocol=ssh;"
-SRCREV = "447ca4e0ec5e5844b3882541f39f1d0a622637e6"
+SRCREV = "master"
 
 PV = "+git${SRCPV}"
 

@@ -8,4 +8,4 @@ git clone --branch morty git://git.yoctoproject.org/meta-xilinx
 . oe-init-build-env
 bitbake-layers add-layer ../meta-xilinx
 bitbake-layers add-layer ../meta-caribou
-sed -i 's/^MACHINE ??= ".*"/MACHINE ??= "zc706-zynq7"/' conf/local.conf
+sed -i 's/^MACHINE ??= ".*"/MACHINE ??= "caribou-zynq7"/' conf/local.conf
