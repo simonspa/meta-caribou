@@ -17,7 +17,7 @@ index a341662..8d7126b 100644
  /include/ "zynq-7000.dtsi"
  /include/ "pl.dtsi"
  / {
-+	model = "Zynq ZC706 Development Board";
++	model = "Caribou Board (based on Zynq ZC706 Development Board)";
 +	compatible = "xlnx,zynq-zc706", "xlnx,zynq-7000";
 +
  	cpus {
