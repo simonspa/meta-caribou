@@ -1,0 +1,35 @@
+From 635712ae76ae94e167ccc2c426383fb54cc4be23 Mon Sep 17 00:00:00 2001
+From: Adrian Fiergolski <adrian.fiergolski@cern.ch>
+Date: Mon, 30 Jan 2017 15:23:09 +0100
+Subject: [PATCH] Add SPI device (SPIdev).
+
+SPIdev allows the spi driver to work as a device in the userspace.
+
+Signed-off-by: Adrian Fiergolski <adrian.fiergolski@cern.ch>
+---
+ outputs/dts/pl.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/outputs/dts/pl.dtsi b/outputs/dts/pl.dtsi
+index 0a06fcb..163a019 100644
+--- a/outputs/dts/pl.dtsi
++++ b/outputs/dts/pl.dtsi
+@@ -21,6 +21,15 @@
+ 			reg = <0x41e00000 0x10000>;
+ 			xlnx,num-ss-bits = <0x1>;
+ 			xlnx,spi-mode = <0>;
++
++			spidev@0 {
++				 #address-cells = <1>;
++				 #size-cells = <0>;
++
++				 compatible = "spidev";
++				 reg = <0>;
++				 spi-max-frequency = <100000000>;
++			};
+ 		};
+ 	};
+ };
+-- 
+2.9.3
+
