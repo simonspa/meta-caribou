@@ -1,0 +1,25 @@
+From cd4ac7993f5f43e616a8f4b021fa03db676262db Mon Sep 17 00:00:00 2001
+From: Adrian Fiergolski <adrian.fiergolski@cern.ch>
+Date: Tue, 31 Jan 2017 16:47:12 +0100
+Subject: [PATCH] Add caribou chip compatibility to spidev driver.
+
+Signed-off-by: Adrian Fiergolski <adrian.fiergolski@cern.ch>
+---
+ drivers/spi/spidev.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index e3c19f3..abaa088 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -695,6 +695,7 @@ static struct class *spidev_class;
+ static const struct of_device_id spidev_dt_ids[] = {
+ 	{ .compatible = "rohm,dh2228fv" },
+ 	{ .compatible = "lineartechnology,ltc2488" },
++	{ .compatible = "caribou,clicpix2" },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, spidev_dt_ids);
+-- 
+2.9.3
+
