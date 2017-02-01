@@ -12,7 +12,7 @@ COMPATIBLE_MACHINE = "caribou-zynq7"
 SRC_URI = "git://git@gitlab.cern.ch:7999/Caribou/peary-firmware.git;protocol=ssh;"
 SRCREV = "master"
 
-PV = "+git${SRCPV}"
+PV = "1.0+git${SRCPV}"
 
 S = "${WORKDIR}/git"
 
