@@ -13,4 +13,4 @@ sed -i 's/^MACHINE ??= ".*"/MACHINE ??= "caribou-zynq7"/' conf/local.conf
 #Enable PR service, in order to always download the latest versions
 #from the git repositories
 echo '#PR service 
-PRSERV_HOST = "localhost:0"' > conf/local.conf
+PRSERV_HOST = "localhost:0"' >> conf/local.conf
