@@ -7,7 +7,7 @@ SRC_URI = "git://git@gitlab.cern.ch:7999/Caribou/peary.git;protocol=ssh"
 
 # Modify these as desired
 PV = "1.0+git${SRCPV}"
-SRCREV = "48c82b14a83b604a49141efdfb73f60666dc34e2"
+SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
 
