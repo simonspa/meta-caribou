@@ -13,6 +13,8 @@ S = "${WORKDIR}/git"
 
 inherit cmake pkgconfig
 
+DEPENDS = "i2c-tools"
+
 # Specify any options you want to pass to cmake using EXTRA_OECMAKE:
 EXTRA_OECMAKE = " -DBUILD_example=ON \
 	          -DINSTALL_PREFIX=/usr/ \
