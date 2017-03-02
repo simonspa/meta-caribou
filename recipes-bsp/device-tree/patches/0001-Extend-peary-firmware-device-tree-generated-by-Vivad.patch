@@ -72,7 +72,7 @@ index a341662..8d7126b 100644
 -	clock-frequency = <400000>;
 -	i2c-reset = <&gpio0 46 0>;
  	status = "okay";
-+	clock-frequency = <400000>;
++	clock-frequency = <50000>;
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&pinctrl_i2c0_default>;
 +
