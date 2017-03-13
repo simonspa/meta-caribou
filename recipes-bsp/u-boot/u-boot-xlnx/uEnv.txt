@@ -1,4 +1,4 @@
-ethaddr=00:0A:35:00:01:23
+ethaddr=00:0A:35:00:01:24
 kernel_image=uImage
 devicetree_image=system.dtb
 bootargs=root=/dev/mmcblk0p2 rw rootwait
