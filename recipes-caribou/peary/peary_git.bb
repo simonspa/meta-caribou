@@ -22,3 +22,5 @@ EXTRA_OECMAKE = " -DBUILD_example=ON \
 	       "
 FILES_${PN}  += "${FILES_SOLIBSDEV}"
 FILES_${PN}-dev = ""
+
+INSANE_SKIP_${PN} = "dev-so"
