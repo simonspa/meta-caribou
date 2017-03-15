@@ -1,7 +1,7 @@
-From cd4ac7993f5f43e616a8f4b021fa03db676262db Mon Sep 17 00:00:00 2001
+From d7df76a5d77bc360bfd849a0f530753907e7cb06 Mon Sep 17 00:00:00 2001
 From: Adrian Fiergolski <adrian.fiergolski@cern.ch>
 Date: Tue, 31 Jan 2017 16:47:12 +0100
-Subject: [PATCH] Add caribou chip compatibility to spidev driver.
+Subject: [PATCH 2/5] Add caribou chip compatibility to spidev driver.
 
 Signed-off-by: Adrian Fiergolski <adrian.fiergolski@cern.ch>
 ---
