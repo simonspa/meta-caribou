@@ -1,7 +1,7 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/patches:"
 SRC_URI = "git://git@gitlab.cern.ch:7999/Caribou/peary-firmware.git;protocol=ssh; \
-           file://0001-Extend-peary-firmware-device-tree-generated-by-Vivad.patch \
-           file://0001-Add-SPI-interface-of-the-CLICpix2-chip-to-the-device.patch \
+           file://0001-Extend-a-device-tree-generated-by-Vivado-with-ZC706-.patch \
+	   file://0002-Add-CLICpix2-SPI-interface-to-the-device-tree.patch \
            "
 
 SRCREV = "${AUTOREV}"
