@@ -1,0 +1,30 @@
+From ac93fb1eecc298ab9e9c0b3a6a890d042d0526b0 Mon Sep 17 00:00:00 2001
+From: Adrian Fiergolski <adrian.fiergolski@cern.ch>
+Date: Tue, 21 Mar 2017 09:55:51 +0100
+Subject: [PATCH 5/5] SPI device driver lets the SPI core to drive the SS
+ signal.
+
+Signed-off-by: Adrian Fiergolski <adrian.fiergolski@cern.ch>
+---
+ drivers/spi/spi-xilinx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-xilinx.c b/drivers/spi/spi-xilinx.c
+index 70d18e6..7742a91 100644
+--- a/drivers/spi/spi-xilinx.c
++++ b/drivers/spi/spi-xilinx.c
+@@ -244,9 +244,9 @@ static void xspi_init_hw(struct xilinx_spi *xspi)
+ 	/* Deselect the slave on the SPI bus */
+ 	xspi->write_fn(0xffff, regs_base + XSPI_SSR_OFFSET);
+ 	/*
+-	 * Disable the transmitter, enable Manual Slave Select Assertion,
++	 * Disable the transmitter,
+ 	 * put SPI controller into master mode, and enable it */
+-	xspi->write_fn(XSPI_CR_MANUAL_SSELECT |	XSPI_CR_MASTER_MODE |
++	xspi->write_fn( XSPI_CR_MASTER_MODE |
+ 		XSPI_CR_ENABLE | XSPI_CR_TXFIFO_RESET |	XSPI_CR_RXFIFO_RESET,
+ 		regs_base + XSPI_CR_OFFSET);
+ }
+-- 
+2.9.3
+
