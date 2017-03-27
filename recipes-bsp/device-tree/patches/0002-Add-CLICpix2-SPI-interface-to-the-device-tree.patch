@@ -15,7 +15,7 @@ index 7c7e56f..d5ad863 100644
 @@ -12,12 +12,26 @@
  		compatible = "simple-bus";
  		ranges ;
- 		AXI_SPI_QUAD_staic_caribou_top_axi_quad_spi_0_0_0: staic_caribou_top_axi_quad_spi_0_0@43c00000 {
+ 		CLICpix2_SPI_staic_caribou_top_axi_quad_spi_0_0_0: staic_caribou_top_axi_quad_spi_0_0@43c00000 {
 -			compatible = "xlnx,staic-caribou-top-axi-quad-spi-0-0-1.0";
 +			compatible = "xlnx,xps-spi-2.00.a";
  			interrupt-parent = <&intc>;
