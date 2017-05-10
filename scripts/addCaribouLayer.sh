@@ -3,11 +3,14 @@ cd ../../
 
 #Clone repositirues of the required layers
 git clone --branch morty git://git.yoctoproject.org/meta-xilinx
+#gnuplot
+git clone --branch morty git://git.openembedded.org/meta-openembedded/
 
 #Set up bitbake
 . oe-init-build-env
 bitbake-layers add-layer ../meta-xilinx
 bitbake-layers add-layer ../meta-caribou
+bitbake-layers add-layer ..//meta-openembedded/meta-oe
 sed -i 's/^MACHINE ??= ".*"/MACHINE ??= "caribou-zynq7"/' conf/local.conf
 
 #Enable PR service, in order to always download the latest versions
