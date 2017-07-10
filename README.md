@@ -23,7 +23,7 @@ If you only want to prepare an SD card and run the tested Caribou Release on you
 
 This layer depends on:
 
- * URI: git://git.yoctoproject.org/poky tag: morty-16.0.0
+ * URI: git://git.yoctoproject.org/poky tag: morty-16.0.1
 
  * URI: git://git.yoctoproject.org/meta-xilinx branch: morty
 
@@ -31,7 +31,7 @@ This layer depends on:
 
 * Install the latest version of yocto and switch to the supported tag
   ```
-  $ git clone --branch morty-16.0.0 git://git.yoctoproject.org/poky
+  $ git clone --branch morty-16.0.1 git://git.yoctoproject.org/poky
   ```
 * Install this caribou layer
   ```
