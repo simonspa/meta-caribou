@@ -20,7 +20,7 @@ EXTRA_OECMAKE = " -DBUILD_example=ON \
 	          -DINSTALL_PREFIX=/usr/ \
 		  -DCMAKE_SKIP_RPATH=ON \
 		  -DCMAKE_BUILD_TYPE=Debug \
-		  -CBUILD_server=ON \
+		  -DBUILD_server=ON \
 	       "
 FILES_${PN}  += "${FILES_SOLIBSDEV}"
 FILES_${PN}-dev = ""
