@@ -9,7 +9,8 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta-caribou/COPYING.MIT;md5=838c366f69b7
 
 COMPATIBLE_MACHINE = "caribou-zynq7"
 
-SRC_URI = "git://git@gitlab.cern.ch:7999/Caribou/peary-firmware.git;protocol=ssh;"
+SRC_URI = "git://gitlab.cern.ch/Caribou/peary-firmware.git;protocol=https;"
+
 SRCREV = "${AUTOREV}"
 
 PV = "1.0+git${SRCPV}"
