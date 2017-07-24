@@ -19,7 +19,7 @@ DEPENDS = "i2c-tools readline"
 EXTRA_OECMAKE = " -DBUILD_example=ON \
 	          -DINSTALL_PREFIX=/usr/ \
 		  -DCMAKE_SKIP_RPATH=ON \
-		  -DCMAKE_BUILD_TYPE=Debug \
+		  -DCMAKE_BUILD_TYPE=Release \
 		  -DBUILD_server=ON \
 	       "
 FILES_${PN}  += "${FILES_SOLIBSDEV}"
