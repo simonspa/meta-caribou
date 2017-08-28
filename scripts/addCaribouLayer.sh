@@ -2,9 +2,9 @@
 cd ../../
 
 #Clone repositirues of the required layers
-git clone --branch morty git://git.yoctoproject.org/meta-xilinx
+git clone --branch pyro git://git.yoctoproject.org/meta-xilinx
 #gnuplot
-git clone --branch morty git://git.openembedded.org/meta-openembedded/
+git clone --branch pyro git://git.openembedded.org/meta-openembedded/
 
 #Set up bitbake
 . oe-init-build-env
