@@ -1,6 +1,6 @@
-From ac93fb1eecc298ab9e9c0b3a6a890d042d0526b0 Mon Sep 17 00:00:00 2001
+From 024b585b3c854a53359a914864a88dd4bcd3a2f7 Mon Sep 17 00:00:00 2001
 From: Adrian Fiergolski <adrian.fiergolski@cern.ch>
-Date: Tue, 21 Mar 2017 09:55:51 +0100
+Date: Mon, 28 Aug 2017 17:30:28 +0200
 Subject: [PATCH 5/5] SPI device driver lets the SPI core to drive the SS
  signal.
 
@@ -10,10 +10,10 @@ Signed-off-by: Adrian Fiergolski <adrian.fiergolski@cern.ch>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/spi/spi-xilinx.c b/drivers/spi/spi-xilinx.c
-index 70d18e6..7742a91 100644
+index a5431b8a3bc2..c8b635f8bc77 100644
 --- a/drivers/spi/spi-xilinx.c
 +++ b/drivers/spi/spi-xilinx.c
-@@ -244,9 +244,9 @@ static void xspi_init_hw(struct xilinx_spi *xspi)
+@@ -255,9 +255,9 @@ static void xspi_init_hw(struct xilinx_spi *xspi)
  	/* Deselect the slave on the SPI bus */
  	xspi->write_fn(0xffff, regs_base + XSPI_SSR_OFFSET);
  	/*
@@ -26,5 +26,5 @@ index 70d18e6..7742a91 100644
  		regs_base + XSPI_CR_OFFSET);
  }
 -- 
-2.9.3
+2.11.0
 
