@@ -1,0 +1,68 @@
+From 790f70b2411e2389bdd8879ddf033014cb253f8e Mon Sep 17 00:00:00 2001
+From: Adrian Fiergolski <adrian.fiergolski@cern.ch>
+Date: Wed, 30 Aug 2017 20:41:02 +0200
+Subject: [PATCH] Fix power managment in spi-xilinx.c
+
+Power managment for qspi->dev is never enabled. Thus xspi_setup always fails. In fact, spi_master takes care of its power managment and ignores its childs.
+It is enough to provide power managment at platform_device (pdev->dev) level.
+
+Signed-off-by: Adrian Fiergolski <adrian.fiergolski@cern.ch>
+---
+ drivers/spi/spi-xilinx.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/spi/spi-xilinx.c b/drivers/spi/spi-xilinx.c
+index c8b635f8bc77..50d9fe33ac5b 100644
+--- a/drivers/spi/spi-xilinx.c
++++ b/drivers/spi/spi-xilinx.c
+@@ -379,12 +379,7 @@ static int xspi_setup(struct spi_device *qspi)
+ 	if (qspi->master->busy)
+ 		return -EBUSY;
+ 
+-	ret = pm_runtime_get_sync(&qspi->dev);
+-	if (ret < 0)
+-		return ret;
+-
+ 	ret = xspi_setup_transfer(qspi, NULL);
+-	pm_runtime_put_sync(&qspi->dev);
+ 
+ 	return ret;
+ }
+@@ -455,10 +450,6 @@ static int xspi_prepare_transfer_hardware(struct spi_master *master)
+ 	u32 cr;
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(&master->dev);
+-	if (ret < 0)
+-		return ret;
+-
+ 	cr = xqspi->read_fn(xqspi->regs + XSPI_CR_OFFSET);
+ 	cr |= XSPI_CR_ENABLE;
+ 	xqspi->write_fn(cr, xqspi->regs + XSPI_CR_OFFSET);
+@@ -484,7 +475,6 @@ static int xspi_unprepare_transfer_hardware(struct spi_master *master)
+ 	cr &= ~XSPI_CR_ENABLE;
+ 	xqspi->write_fn(cr, xqspi->regs + XSPI_CR_OFFSET);
+ 
+-	pm_runtime_put_sync(&master->dev);
+ 
+ 	return 0;
+ }
+@@ -801,11 +791,15 @@ static int xilinx_spi_probe(struct platform_device *pdev)
+ 		goto clk_unprepare_all;
+ 	}
+ 	xspi->cs_inactive = 0xffffffff;
++	ret = pm_runtime_get_sync(&pdev->dev);
++	if (ret < 0)
++		goto clk_unprepare_all;
+ 	ret = spi_register_master(master);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "spi_register_master failed\n");
+ 		goto clk_unprepare_all;
+ 	}
++	pm_runtime_put(&pdev->dev);
+ 
+ 	return ret;
+ 
+-- 
+2.11.0
+
