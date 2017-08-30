@@ -1,0 +1,67 @@
+From 637d60b0c4f3df1b9342537ff5d2f005d9757b78 Mon Sep 17 00:00:00 2001
+From: Adrian Fiergolski <adrian.fiergolski@cern.ch>
+Date: Tue, 29 Aug 2017 16:13:44 +0200
+Subject: [PATCH 1/2] Add I2C muxes of the CaR board to the device tree.
+
+Signed-off-by: Adrian Fiergolski <adrian.fiergolski@cern.ch>
+---
+ outputs/dts/zc706.dtsi | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+
+diff --git a/outputs/dts/zc706.dtsi b/outputs/dts/zc706.dtsi
+index 9978e42..4bd9c54 100644
+--- a/outputs/dts/zc706.dtsi
++++ b/outputs/dts/zc706.dtsi
+@@ -102,6 +102,49 @@
+ 			};
+ 		};
+ 
++		//HPC
++		i2c@5 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <5>;
++		       	i2cswitch_hpc@71 {
++				    	 compatible = "nxp,pca9846";
++					 #address-cells = <1>;
++				    	 #size-cells = <0>;
++				    	 reg = <0x71>;
++
++					 i2c_hpc@0 {
++					 	compatible = "nxp,pca9846";
++					 	#address-cells = <1>;
++					 	#size-cells = <0>;
++					 	reg = <0>;
++					 };
++			};
++
++		};
++
++		//LPC
++		i2c@6 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <6>;
++		       	i2cswitch_lpc@71 {
++
++				    	 compatible = "nxp,pca9846";
++					 #address-cells = <1>;
++				    	 #size-cells = <0>;
++				    	 reg = <0x71>;
++
++					 i2c_lpc@0 {
++					 	compatible = "nxp,pca9846";
++					 	#address-cells = <1>;
++					 	#size-cells = <0>;
++					 	reg = <0>;
++					 };
++			};
++
++		};
++
+ 		i2c@7 {
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+-- 
+2.11.0
+

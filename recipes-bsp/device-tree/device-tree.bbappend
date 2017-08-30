@@ -1,27 +1,16 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/patches:"
-SRC_URI = "git://gitlab.cern.ch/Caribou/peary-firmware.git;protocol=https; \
-           file://0001-Extend-a-device-tree-generated-by-Vivado-with-ZC706-.patch \
-           file://0002-Add-CLICpix2-SPI-interface-to-the-device-tree.patch \
+
+SRC_URI = "gitsm://gitlab.cern.ch/Caribou/peary-firmware.git;protocol=https; \
+           file://0001-Add-I2C-muxes-of-the-CaR-board-to-the-device-tree.patch;striplevel=3 \
+	   file://0002-Add-CLICpix2-SPI-interface-to-the-device-tree.patch;striplevel=3 \
            "
 
 SRCREV = "${AUTOREV}"
 
 PV = "1.0+git${SRCPV}"
 
-S = "${WORKDIR}/git"
-
-DEVICETREE_caribou-zynq7 = "${S}/outputs/dts/system-top.dts"
+S = "${WORKDIR}/git/outputs/dts/"
 
 KERNEL_DTS_INCLUDE_caribou-zynq7 = "\
 			git/outputs/dts \
 			"		
-
-MACHINE_DEVICETREE_caribou-zynq7 = " \
-			   git/outputs/dts/system.dts \
-			   git/outputs/dts/system-top.dts \
-			   git/outputs/dts/pcw.dtsi \	
-			   git/outputs/dts/skeleton.dtsi \
-			   git/outputs/dts/zynq-7000.dtsi \
-			   git/outputs/dts/pl.dtsi \
-			   "
-

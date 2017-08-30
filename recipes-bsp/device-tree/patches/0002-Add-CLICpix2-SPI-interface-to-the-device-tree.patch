@@ -1,33 +1,21 @@
-From 74510be1751406a13e4092f2020beb370915e532 Mon Sep 17 00:00:00 2001
+From 141309853152998289bce053767e6ece9c677488 Mon Sep 17 00:00:00 2001
 From: Adrian Fiergolski <adrian.fiergolski@cern.ch>
-Date: Thu, 16 Mar 2017 18:08:06 +0100
+Date: Tue, 29 Aug 2017 16:15:50 +0200
 Subject: [PATCH 2/2] Add CLICpix2 SPI interface to the device tree.
 
 Signed-off-by: Adrian Fiergolski <adrian.fiergolski@cern.ch>
 ---
- outputs/dts/pl.dtsi | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ outputs/dts/pl.dtsi | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/outputs/dts/pl.dtsi b/outputs/dts/pl.dtsi
-index 7c7e56f..d5ad863 100644
+index 791cdb6..bcec91c 100644
 --- a/outputs/dts/pl.dtsi
 +++ b/outputs/dts/pl.dtsi
-@@ -12,12 +12,26 @@
- 		compatible = "simple-bus";
- 		ranges ;
- 		CLICpix2_SPI_staic_caribou_top_axi_quad_spi_0_0_0: staic_caribou_top_axi_quad_spi_0_0@43c00000 {
--			compatible = "xlnx,staic-caribou-top-axi-quad-spi-0-0-1.0";
-+			compatible = "xlnx,xps-spi-2.00.a";
- 			interrupt-parent = <&intc>;
- 			interrupts = <0 29 1>;
+@@ -33,6 +33,16 @@
  			reg = <0x43c00000 0x10000>;
- 			xlnx,sck-ratio1 = <0x1>;
- 			xlnx,use-startup-int = <0x0>;
-+			bits-per-word = <16>;
-+			num-cs = <0x1>;
-+			xlnx,num-ss-bits = <0x1>;
-+			xlnx,spi-mode = <0>;
-+			fifo-size = <256>;
+ 			xlnx,num-ss-bits = <0x1>;
+ 			xlnx,spi-mode = <0>;
 +			spidev@0 {
 +				 #address-cells = <1>;
 +				 #size-cells = <0>;
@@ -37,9 +25,10 @@ index 7c7e56f..d5ad863 100644
 +				 spi-max-frequency = <100000000>;
 +				 spi-bits-per-word = <16>;
 +			};
++
  		};
- 	};
- };
+ 		Caribou_control_0: Caribou_control@43c30000 {
+ 			compatible = "xlnx,Caribou-control-1.0";
 -- 
-2.9.3
+2.11.0
 
