@@ -2,7 +2,7 @@ SUMMARY = "The BSP design for Caribou hardware"
 DESCRIPTION = "It downloads from peary-firmware gitlab repostitory a bitstream and the HDF file (initialization ps7_init_gpl.c/h \
 platform headers)."
 SECTION = "bsp"
-DEPENDS += "unzip"
+DEPENDS += "unzip-native"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta-caribou/COPYING.MIT;md5=838c366f69b72c5df05c96dff79b35f2"
@@ -20,10 +20,7 @@ S = "${WORKDIR}/git"
 BIT = "outputs/caribou-soc.bit"
 HDF = "outputs/caribou_top.hdf"
 
-PROVIDES += "virtual/bitstream virtual/zynq7-platform-init"
-
-PLATFORM_INIT ?= "ps7_init_gpl.c \
-		  ps7_init_gpl.h"
+PROVIDES += "virtual/bitstream virtual/xilinx-platform-init"
 
 FILES_${PN}-platform-init += " \
 		${PLATFORM_INIT_DIR}/ps7_init_gpl.c \
@@ -40,7 +37,7 @@ BITSTREAM ?= "bitstream-${PV}-${PR}.bit"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-inherit zynq7-platform-paths
+inherit xilinx-platform-init
 inherit deploy
 
 SYSROOT_DIRS += "${PLATFORM_INIT_DIR}"
@@ -48,7 +45,7 @@ SYSROOT_DIRS += "${PLATFORM_INIT_DIR}"
 do_install() {
 	install ${S}/${BIT} ${D}/download.bit
 	install -d ${D}${PLATFORM_INIT_DIR}
-	for fn in ${PLATFORM_INIT}; do
+	for fn in ${PLATFORM_INIT_FILES}; do
 		unzip -o ${S}/${HDF} ${fn} -d ${D}${PLATFORM_INIT_DIR}
 	done
 }
