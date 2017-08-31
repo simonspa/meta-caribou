@@ -24,7 +24,7 @@ IMAGE_PATH=$PWD/$( basename $( wic create sdimage-bootpart -e caribou-image 2>&1
 read -p "Please enter absolute path SD card device [$SD_DEVICE_DEFAULT]: " SD_DEVICE
 SD_DEVICE=${SD_DEVICE:-$SD_DEVICE_DEFAULT}
 #Get device name
-read -p "Please enter the target deivce name from list: pclcd-zynq, pclcd-lab-zynq, pclcd-lab-zynq1 [pclcd-zynq]: " DEVICE_NAME
+read -p "Please enter the target deivce name from list: pclcd-zynq, pclcd-testbeam-zynq, pclcd-lab-zynq1 [pclcd-zynq]: " DEVICE_NAME
 DEVICE_NAME=${DEVICE_NAME:-$DEVICE_NAME_DEFAULT}
 if sudo dd if=${IMAGE_PATH} of=$SD_DEVICE bs=1M ; then
     #Wait till dd finishes
@@ -40,7 +40,7 @@ mkdir -p boot
 sudo mount -o umask=000  ${SD_DEVICE_DEFAULT}p1 boot
 case "$DEVICE_NAME" in
     "pclcd-zynq"      ) mac="00:0A:35:00:01:24";;
-    "pclcd-lab-zynq"  ) mac="00:0A:35:00:01:23";;
+    "pclcd-testbeam-zynq"  ) mac="00:0A:35:00:01:23";;
     "pclcd-lab-zynq1" ) mac="00:0A:35:00:01:25";;
     *                 ) printf "${RED}Unknown device name. Can't assign the MAC address !\n";
 			printf "${NC}\n";
