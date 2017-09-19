@@ -28,12 +28,12 @@ read -p "Please enter the target deivce name from list: pclcd-lab-zynq, pclcd-te
 DEVICE_NAME=${DEVICE_NAME:-$DEVICE_NAME_DEFAULT}
 if sudo dd if=${IMAGE_PATH} of=$SD_DEVICE bs=1M ; then
     #Wait till dd finishes
-    printf "${ORANGE}Waiting for coping process to complete...\n"
+    printf "${ORANGE}Waiting for copying process to complete...\n"
     sudo sync
 
     printf "${GREEN}Done.\n"
 else
-    printf "${RED}Coping process failed !\n"
+    printf "${RED}Copying process failed !\n"
 fi
 #Assign MAC address
 mkdir -p boot
