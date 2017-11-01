@@ -3,7 +3,7 @@
 
 # get poky
 export POKY_VERSION="pyro-17.0.2"
-if [ ! -d poky/poky ]; then
+if [ ! -d poky ]; then
     git clone --branch $POKY_VERSION git://git.yoctoproject.org/poky
 else
     git -C poky fetch
