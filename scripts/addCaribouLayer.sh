@@ -2,6 +2,9 @@
 # The script adds meta-caribou layer with its dependencies to the poky framework.
 # It assumes that meta-caribou has been cloned to the 'poky' directory.
 
+export XILINX_VERSION="pyro"
+export OPENEMBEDED_VERSION="pyro"
+
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
   DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
@@ -12,10 +15,24 @@ SCRIPT_PATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 cd $SCRIPT_PATH/../../
 
+###########################################
 #Clone repositirues of the required layers
-git clone --branch pyro git://git.yoctoproject.org/meta-xilinx
-#gnuplot
-git clone --branch pyro git://git.openembedded.org/meta-openembedded/
+###########################################
+if [ ! -d meta-xilinx ]; then
+    git clone --branch $XILINX_VERSION git://git.yoctoproject.org/meta-xilinx
+else
+    git -c meta-xilinx pull
+    git -c meta-xilinx checkout $XILINX_VERSION
+fi
+
+if [ ! -d meta-openembedded ]; then
+    #gnuplot
+    git clone --branch $OPENEMBEDED_VERSION git://git.openembedded.org/meta-openembedded/
+else
+    git -c meta-openembedded pull
+    git -c meta-openembedded checkout $OPENEMBEDED_VERSION
+
+    
 
 #Set up bitbake
 . oe-init-build-env
