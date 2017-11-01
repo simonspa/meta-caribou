@@ -23,27 +23,18 @@ If you only want to prepare an SD card and run the tested Caribou Release on you
 
 This layer depends on:
 
- * URI: git://git.yoctoproject.org/poky tag: pyro-17.0.1
+ * URI: git://git.yoctoproject.org/poky tag: pyro-17.0.2
 
  * URI: git://git.yoctoproject.org/meta-xilinx branch: pyro
 
+ * URI: git://git.openembedded.org/meta-openembedded/ branch: pyro
+
 ### Preparation
+In order to setup the poky environment, including meta-caribou layer with its dependencies, run the command below
 
-* Install the latest version of yocto and switch to the supported tag
   ```
-  $ git clone --branch pyro-17.0.1 git://git.yoctoproject.org/poky
-  ```
-* Install this caribou layer
-  ```
-  $ cd poky/
-  $ git clone ssh://git@gitlab.cern.ch:7999/Caribou/meta-caribou.git
-  ```
+  $ source <(curl -s https://gitlab.cern.ch/Caribou/meta-caribou/raw/master/misc/setup/setup.sh)
 
-In order to use the caribou layer, you need to make the build system aware of
-it. Moreover, you need to install and add all the dependency layers. Thus, from `meta-caribou/scripts` call the script:
-  ```
-  $ cd meta-caribou/scripts/
-  $ ./addCaribouLayer.sh
   ```
 
 ### Build process
