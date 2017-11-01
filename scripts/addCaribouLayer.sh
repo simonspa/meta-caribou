@@ -31,7 +31,7 @@ if [ ! -d meta-openembedded ]; then
 else
     git -c meta-openembedded pull
     git -c meta-openembedded checkout $OPENEMBEDED_VERSION
-
+fi
     
 
 #Set up bitbake
