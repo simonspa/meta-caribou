@@ -10,14 +10,12 @@ else
     git -C poky checkout $POKY_VERSION
 fi
 
-cd poky
-
 #get meta-caribou
 if [ ! -d meta-caribou ]; then
-    git clone https://gitlab.cern.ch/Caribou/meta-caribou.git
+    git clone https://gitlab.cern.ch/Caribou/meta-caribou.git poky/meta-caribou
 else
-    git -c meta-caribou pull
+    git -c poky/meta-caribou pull
 fi
 
 #add meta-caribou to the poky framework    
-./meta-caribou/scripts/addCaribouLayer.sh
+./poky/meta-caribou/scripts/addCaribouLayer.sh
