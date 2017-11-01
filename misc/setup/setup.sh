@@ -14,7 +14,7 @@ fi
 if [ ! -d poky/meta-caribou ]; then
     git clone https://gitlab.cern.ch/Caribou/meta-caribou.git poky/meta-caribou
 else
-    git -c poky/meta-caribou pull
+    git -C poky/meta-caribou pull
 fi
 
 #add meta-caribou to the poky framework    
