@@ -1,7 +1,7 @@
 #!/bin/bash
 # The script configures the whole poky framework and ads to it the meta-caribou layer.
 # Be defualt the scripts uses the latest meta-caribou version from master.
-# However, with DO_NOT_PULL parameter, it will keep poky/meta-caribou directory without changes.
+# However, with GIT_CI parameter, it will not clone/pull poky/meta-caribou.
 
 # get poky
 export POKY_VERSION="pyro-17.0.2"
@@ -13,10 +13,10 @@ else
 fi
 
 #get meta-caribou
-if [ ! -d poky/meta-caribou ]; then
-    git clone https://gitlab.cern.ch/Caribou/meta-caribou.git poky/meta-caribou
-else
-    if [ "$1" != "DO_NOT_PULL" ]; then
+if [ "$1" != "GIT_CI" ]; then
+    if [ ! -d poky/meta-caribou ]; then
+	git clone https://gitlab.cern.ch/Caribou/meta-caribou.git poky/meta-caribou
+    else
 	git -C poky/meta-caribou pull
     fi
 fi
