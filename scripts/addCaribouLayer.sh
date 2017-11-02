@@ -1,19 +1,22 @@
 #!/bin/bash
 # The script adds meta-caribou layer with its dependencies to the poky framework.
 # It assumes that meta-caribou has been cloned to the 'poky' directory.
+# If GIT_CI, the script assumes to be called in the poky directory
 
 export XILINX_VERSION="pyro"
 export OPENEMBEDED_VERSION="pyro"
 
-SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
-  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-  SOURCE="$(readlink "$SOURCE")"
-  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
-done
-SCRIPT_PATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+if [ "$1" != "GIT_CI" ]; then
+    SOURCE="${BASH_SOURCE[0]}"
+    while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+	DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+	SOURCE="$(readlink "$SOURCE")"
+	[[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+    done
+    SCRIPT_PATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-cd $SCRIPT_PATH/../../
+    cd $SCRIPT_PATH/../../
+fi
 
 ###########################################
 #Clone repositirues of the required layers
