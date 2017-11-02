@@ -19,7 +19,7 @@ if [ "$1" != "GIT_CI" ]; then
     else
 	git -C poky/meta-caribou pull
     fi
-fi
 
-#add meta-caribou to the poky framework    
-./poky/meta-caribou/scripts/addCaribouLayer.sh
+    #add meta-caribou to the poky framework    
+    ./poky/meta-caribou/scripts/addCaribouLayer.sh
+fi
