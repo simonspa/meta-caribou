@@ -24,16 +24,16 @@ fi
 if [ ! -d meta-xilinx ]; then
     git clone --branch $XILINX_VERSION git://git.yoctoproject.org/meta-xilinx
 else
-    git -C meta-xilinx pull
-    git -C meta-xilinx checkout $XILINX_VERSION
+    git --git-dir=meta-xilinx/.git pull
+    git --git-dir=meta-xilinx/.git checkout $XILINX_VERSION
 fi
 
 if [ ! -d meta-openembedded ]; then
     #gnuplot
     git clone --branch $OPENEMBEDED_VERSION git://git.openembedded.org/meta-openembedded/
 else
-    git -C meta-openembedded pull
-    git -C meta-openembedded checkout $OPENEMBEDED_VERSION
+    git --git-dir=meta-openembedded/.git pull
+    git --git-dir=meta-openembedded/.git checkout $OPENEMBEDED_VERSION
 fi
     
 
