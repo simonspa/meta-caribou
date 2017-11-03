@@ -17,7 +17,7 @@ if [ "$1" != "GIT_CI" ]; then
     if [ ! -d poky/meta-caribou ]; then
 	git clone https://gitlab.cern.ch/Caribou/meta-caribou.git poky/meta-caribou
     else
-	git --git-dir=poky/meta-caribou.git pull
+	git --git-dir=poky/meta-caribou/.git pull
     fi
 
     #add meta-caribou to the poky framework    
