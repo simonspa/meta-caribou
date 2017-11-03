@@ -8,8 +8,8 @@ export POKY_VERSION="pyro-17.0.2"
 if [ ! -d poky ]; then
     git clone --branch $POKY_VERSION git://git.yoctoproject.org/poky
 else
-    git --git-dir=poky.git fetch
-    git --git-dir=poky.git checkout $POKY_VERSION
+    git --git-dir=poky/.git fetch
+    git --git-dir=poky/.git checkout $POKY_VERSION
 fi
 
 #get meta-caribou
