@@ -38,7 +38,7 @@ fi
     
 
 #Set up bitbake
-. oe-init-build-env
+. oe-init-build-env ""
 bitbake-layers add-layer ../meta-xilinx
 bitbake-layers add-layer ../meta-caribou
 bitbake-layers add-layer ..//meta-openembedded/meta-oe
