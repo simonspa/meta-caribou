@@ -11,6 +11,7 @@ else
     git --git-dir=poky/.git fetch
     git --git-dir=poky/.git checkout $POKY_VERSION
 fi
+git --git-dir=poky/.git cherry-pick 717303e6fbcbbe181ad9645d762eb5a85d934523
 
 #get meta-caribou
 if [ "$1" != "GIT_CI" ]; then
