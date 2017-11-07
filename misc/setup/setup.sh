@@ -10,6 +10,7 @@ if [ ! -d poky ]; then
 else
     git --git-dir=poky/.git fetch
     git --git-dir=poky/.git checkout $POKY_VERSION
+    git --git-dir=poky/.git reset --hard
 fi
 git --git-dir=poky/.git --work-tree=poky -c user.name=caribou-ci -c user.email=caribou-ci@cern.ch cherry-pick 717303e6fbcbbe181ad9645d762eb5a85d934523
 
