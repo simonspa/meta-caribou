@@ -12,10 +12,10 @@ NC='\033[0m'
 cd ../../
 
 #Set up bitbake
-. oe-init-build-env
+. oe-init-build-env ""
 
 #Build wic dependencies
-bitbake parted-native dosfstools-native mtools-native
+bitbake wic-tools
 
 #Create image
 IMAGE_PATH=$PWD/$( basename $( wic create sdimage-bootpart -e caribou-image 2>&1 | tee /dev/tty | grep "INFO: The new image(s) can be found here:" -A1 | sed -n '2p' ) )
