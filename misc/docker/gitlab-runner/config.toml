@@ -1,0 +1,17 @@
+concurrent = 1
+check_interval = 0
+
+[[runners]]
+  name = "caribou-ci.cern.ch"
+  url = "https://gitlab.cern.ch/"
+  token = "TOKEN"
+  executor = "docker"
+  [runners.docker]
+    tls_verify = false
+    image = "docker-meta-caribou"
+    privileged = false
+    disable_cache = true
+    volumes = ["/cache", "/sstate-cache:/sstate-cache", "/downloads:/downloads"]
+    tmpfs = ["/builds:rw,noexec,nouid"]
+    shm_size = 0
+  [runners.cache]
