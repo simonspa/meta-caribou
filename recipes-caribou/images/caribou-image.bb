@@ -10,4 +10,4 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS += "device-tree"
 IMAGE_FEATURES += "package-management"
 EXTRA_IMAGE_FEATURES ?= "debug-tweaks dev-pkgs tools-sdk"
 
-IMAGE_INSTALL += " caribou-mod cmake git subversion python python3 python-numpy nfs-utils sysstat gdbserver gdb i2c-tools nano peary"
+IMAGE_INSTALL += " caribou-mod cmake git subversion python python3 python-numpy nfs-utils sysstat gdbserver gdb i2c-tools nano screen peary"
