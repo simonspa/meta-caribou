@@ -1,4 +1,5 @@
 stages:
+  - docker
   - build
   - deploy
 
@@ -11,7 +12,7 @@ build:
   tags:
     - caribou-ci-vm
   image: 
-    name: gitlab-registry.cern.ch/caribou/docker-meta-caribou:latest
+    name: ${CI_REGISTRY_IMAGE}:latest
   variables:
     IMAGE_PATH: '/builds/poky/build/wic/'
   artifacts:
@@ -38,7 +39,7 @@ deploy:
   tags:
     - caribou-ci-vm
   image:
-    name : gitlab-registry.cern.ch/caribou/docker-meta-caribou:latest
+    name : ${CI_REGISTRY_IMAGE}:latest
   dependencies:
     - build
   script:
@@ -53,9 +54,26 @@ deploy_master:
   only:
     - master
   image:
-    name : gitlab-registry.cern.ch/caribou/docker-meta-caribou:latest
+    name : ${CI_REGISTRY_IMAGE}:latest
   script:
     - export EOS_MGM_URL=root://eosuser.cern.ch
     - echo $EOS_PASSWORD | kinit $EOS_USER
     - eos rm ${EOS_PATH}/sdimage-latest-mmcblk.zip
     - eos file symlink ${EOS_PATH}/sdimage-latest-mmcblk.zip ${EOS_PATH}/sdimage-${CI_COMMIT_SHA:0:8}-mmcblk.zip
+
+docker:
+  stage: docker
+  only:
+    - schedules
+    - web
+  image: gitlab-registry.cern.ch/vcs/gitlabci-docker-builder:latest
+  tags:
+    - docker-image-build
+  script: 
+    - ""
+  variables:
+    TO: ${CI_REGISTRY_IMAGE}:latest
+    DOCKER_FILE: misc/docker/Dockerfile
+    CONTEXT_DIR: misc/docker/
+    GIT_SUBMODULE_STRATEGY: recursive
+    
