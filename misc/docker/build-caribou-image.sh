@@ -1,5 +1,4 @@
 #!/bin/bash
-export IMAGE_PATH=/builds/poky/wic
 export GIT_PATH=/builds/poky/meta-caribou
 
 if [[ -v CI ]]; then  #running in CI
@@ -8,6 +7,7 @@ if [[ -v CI ]]; then  #running in CI
 else                  # otherwise, use latest master
     git clone https://gitlab.cern.ch/Caribou/meta-caribou.git ${GIT_PATH}
     export CI_COMMIT_SHA=$( git --git-dir=${GIT_PATH}/.git --work-tree=${GIT_PATH} rev-parse --verify HEAD )
+    export IMAGE_PATH=/builds/poky/build/wic/
 fi
 cd /builds/poky
 source meta-caribou/scripts/addCaribouLayer.sh GIT_CI
