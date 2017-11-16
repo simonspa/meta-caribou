@@ -10,8 +10,9 @@ yum install -y initscripts krb5-workstation.x86_64 zip unzip \
     which SDL-devel xterm; \
 yum clean all; \
 rm -rf /var/cache/yum; \
-mkdir -m 777 /builds; \ 
-useradd -ms /bin/bash caribou; 
+mkdir -m 777 /builds; \
+useradd -ms /bin/bash caribou;
+COPY build-caribou-image.sh /usr/local/bin/build-caribou-image.sh
 USER caribou
 WORKDIR /home/caribou
 RUN echo "export LC_ALL=en_US.UTF-8" >> ~/.bashrc ; \
@@ -20,5 +21,6 @@ echo "export LANGUAGE=en_US.UTF-8" >> ~/.bashrc ; \
 /bin/bash -c 'cd /builds && source <(curl -s https://gitlab.cern.ch/Caribou/meta-caribou/raw/master/misc/setup/setup.sh) "GIT_CI" ' ; \
 /bin/bash -c 'cd /builds/poky && source <(curl -s https://gitlab.cern.ch/Caribou/meta-caribou/raw/master/scripts/addCaribouLayer.sh) "GIT_CI" ' ; \
 echo 'SSTATE_DIR = "/sstate-cache"' >>  /builds/poky/build/conf/local.conf ; \
-echo 'DL_DIR = "/downloads"' >>  /builds/poky/build/conf/local.conf ; 
+echo 'DL_DIR = "/downloads"' >>  /builds/poky/build/conf/local.conf ;
 VOLUME [ "/sstate-cache", "/downloads" ]
+CMD ["bash", "-i", "/usr/local/bin/build-caribou-image.sh"]
