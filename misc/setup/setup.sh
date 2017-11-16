@@ -1,7 +1,7 @@
 #!/bin/bash
-# The script configures the whole poky framework and ads to it the meta-caribou layer.
-# Be defualt the scripts uses the latest meta-caribou version from master.
-# However, with GIT_CI parameter, it will not clone/pull poky/meta-caribou.
+#The script configures the whole poky framework and ads to it the meta-caribou layer.
+#By default, the script uses the latest meta-caribou version from the master branch.
+#However, with GIT_CI parameter, it will not clone/pull poky/meta-caribou.
 
 # get poky
 export POKY_VERSION="pyro-17.0.2"
