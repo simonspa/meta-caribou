@@ -3,7 +3,7 @@ MAINTAINER "Adrian Fiergolski" Adrian.Fiergolski@cern.ch
 ENV container docker
 RUN \
 yum install -y epel-release; \
-yum install -y initscripts krb5-workstation.x86_64 zip unzip \
+yum install -y initscripts krb5-workstation.x86_64 zip unzip eos-client \
     file git gawk make wget tar bzip2 gzip python34.x86_64 unzip perl patch \
     diffutils diffstat git cpp gcc gcc-c++ glibc-devel texinfo chrpath socat \
     perl-Data-Dumper perl-Text-ParseWords perl-Thread-Queue python3-pip xz \
