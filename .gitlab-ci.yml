@@ -14,23 +14,13 @@ build:
   image: 
     name: ${CI_REGISTRY_IMAGE}:latest
   variables:
+    GIT_STRATEGY: none
     IMAGE_PATH: '/builds/poky/build/wic/'
   artifacts:
     paths:
       - ${WIC_ZIP_PATH}
     expire_in: 1 hour
-  script:
-    - export LANG=en_US.UTF-8
-    - cd /builds
-    - ln -s ${CI_PROJECT_DIR} poky/meta-caribou
-    - . poky/meta-caribou/misc/setup/setup.sh GIT_CI
-    - ( cd /builds/poky && source ${CI_PROJECT_DIR}/scripts/addCaribouLayer.sh GIT_CI )
-    - cd poky
-    - . oe-init-build-env
-    - bitbake caribou-image
-    - bitbake wic-tools
-    - IMAGE_FULL_PATH=$( wic create sdimage-bootpart -e caribou-image -o ${IMAGE_PATH} 2>&1 |  grep "INFO:\ The\ new image(s)\ can\ be\ found\ here:" -A1 |  sed -n '2p' )
-    - mv $IMAGE_FULL_PATH ${IMAGE_PATH}/sdimage-${CI_COMMIT_SHA:0:8}-mmcblk.direct
+  after_script:
     - mkdir ${WIC_ZIP_PATH}
     - zip -j ${WIC_ZIP_PATH}/sdimage-${CI_COMMIT_SHA:0:8}-mmcblk.zip ${IMAGE_PATH}/sdimage-${CI_COMMIT_SHA:0:8}-mmcblk.direct
 
