@@ -18,7 +18,7 @@ WORKDIR /home/caribou
 RUN echo "export LC_ALL=en_US.UTF-8" >> ~/.bashrc ; \
 echo "export LANG=en_US.UTF-8" >> ~/.bashrc ; \	  
 echo "export LANGUAGE=en_US.UTF-8" >> ~/.bashrc ; \
-/bin/bash -c 'cd /builds && source <(curl -s https://gitlab.cern.ch/Caribou/meta-caribou/raw/master/misc/setup/setup.sh) "GIT_CI" ' ; \
+/bin/bash -c 'cd /builds && source <(curl -s https://gitlab.cern.ch/Caribou/meta-caribou/raw/master/misc/remote_scripts/setup.sh) "GIT_CI" ' ; \
 /bin/bash -c 'cd /builds/poky && source <(curl -s https://gitlab.cern.ch/Caribou/meta-caribou/raw/master/scripts/addCaribouLayer.sh) "GIT_CI" ' ; \
 echo 'SSTATE_DIR = "/sstate-cache"' >>  /builds/poky/build/conf/local.conf ; \
 echo 'DL_DIR = "/downloads"' >>  /builds/poky/build/conf/local.conf ;
