@@ -21,7 +21,7 @@ build:
       - ${WIC_ZIP_PATH}
     expire_in: 1 hour
   script:
-    - build-caribou-image.sh
+    - bash -i /usr/local/bin/build-caribou-image.sh
   after_script:
     - mkdir ${WIC_ZIP_PATH}
     - zip -j ${WIC_ZIP_PATH}/sdimage-${CI_COMMIT_SHA:0:8}-mmcblk.zip ${IMAGE_PATH}/sdimage-${CI_COMMIT_SHA:0:8}-mmcblk.direct
