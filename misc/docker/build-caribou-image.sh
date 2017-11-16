@@ -1,8 +1,13 @@
 #!/bin/bash
 export IMAGE_PATH=/builds/poky/wic
 export GIT_PATH=/builds/poky/meta-caribou
-git clone ${CI_REPOSITORY_URL} ${GIT_PATH}
-git --git-dir=${GIT_PATH}/.git --work-tree=${GIT_PATH} checkout ${CI_COMMIT_SHA}
+
+if [[ -v CI ]]; then  #running in CI
+    git clone ${CI_REPOSITORY_URL} ${GIT_PATH}
+    git --git-dir=${GIT_PATH}/.git --work-tree=${GIT_PATH} checkout ${CI_COMMIT_SHA}
+else                  # otherwise, use latest master
+    git clone https://gitlab.cern.ch/Caribou/meta-caribou.git ${GIT_PATH}
+fi
 cd /builds/poky
 source meta-caribou/scripts/addCaribouLayer.sh GIT_CI
 .  oe-init-build-env
