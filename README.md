@@ -33,7 +33,7 @@ This layer depends on:
 In order to setup the poky environment, including meta-caribou layer with its dependencies, run the command below
 
   ```
-  $ source <(curl -s https://gitlab.cern.ch/Caribou/meta-caribou/raw/master/misc/setup/setup.sh)
+  $ source <(curl -s https://gitlab.cern.ch/Caribou/meta-caribou/raw/master/misc/remote_scripts/setup.sh)
 
   ```
 
