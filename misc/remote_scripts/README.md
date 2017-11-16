@@ -1,4 +1,4 @@
-#Remote scripts
+# Remote scripts
 
 ## setup.sh
 The script configures the whole poky framework and ads to it the meta-caribou layer.
