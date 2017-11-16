@@ -7,7 +7,7 @@ if [[ -v CI ]]; then  #running in CI
     git --git-dir=${GIT_PATH}/.git --work-tree=${GIT_PATH} checkout ${CI_COMMIT_SHA}
 else                  # otherwise, use latest master
     git clone https://gitlab.cern.ch/Caribou/meta-caribou.git ${GIT_PATH}
-    export CI_COMMIT_SHA=$( git --git-dir=${GIT_PATH}/.git --work-tree=${GIT_PATH} )
+    export CI_COMMIT_SHA=$( git --git-dir=${GIT_PATH}/.git --work-tree=${GIT_PATH} rev-parse --verify HEAD )
 fi
 cd /builds/poky
 source meta-caribou/scripts/addCaribouLayer.sh GIT_CI
