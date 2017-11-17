@@ -1,5 +1,7 @@
 # Meta-Caribou
 
+[![build status](https://gitlab.cern.ch/Caribou/meta-caribou/badges/master/build.svg)](https://gitlab.cern.ch/Caribou/meta-caribou/commits/master)
+
 Configuration files and scripts for preparing, building and deploying the Yocto Poky distribution for the Caribou board Xilinx ZC706-ZYNQ.
 A good starting point is following the [quick start guide](http://www.yoctoproject.org/docs/2.0/yocto-project-qs/yocto-project-qs.html) of the Yocto project and reading the github [documentation of the meta-xilinx package](https://github.com/Xilinx/meta-xilinx/blob/master/README.md) and links therein.
 
