@@ -3,7 +3,7 @@
 Configuration files and scripts for preparing, building and deploying the Yocto Poky distribution for the Caribou board Xilinx ZC706-ZYNQ.
 A good starting point is following the [quick start guide](http://www.yoctoproject.org/docs/2.0/yocto-project-qs/yocto-project-qs.html) of the Yocto project and reading the github [documentation of the meta-xilinx package](https://github.com/Xilinx/meta-xilinx/blob/master/README.md) and links therein.
 
-# Getting started
+# Getting started immadeitely
 
 The most straight forward way to use the Caribou Linux distribution relies on the already built `meta-caribou` image.
  * Grab the latest [built](https://cernbox.cern.ch/remote.php/webdav/%20%20project%20caribou/www/sdimage-latest-mmcblk.zip) --- it is based on latest commit from the _master_ branch.
@@ -23,7 +23,7 @@ The most straight forward way to use the Caribou Linux distribution relies on th
  * make sure, the jumpers J32 (big blue box) are in positions 0-0-1-1-0 (for jumper 1-2-3-4-5) in order to boot from the SD card
  * Flip the power switch! Your board should boot now and attempt to get an IP address from any DHCP server using the default MAC address (00:0A:35:00:01:23).
 
-# Building the Caribou Linux distribution
+# Building the Caribou Linux distribution yourself
 You can also build `meta-caribou` image yourself from scratch on your local machine. You can choose between two flows:
 * based in the provided _Docker_ container
 * build in your host's environment
