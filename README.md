@@ -53,6 +53,25 @@ $ bitbake caribou-image
 
 The output files will be located at `build/tmp/deploy/images/zc706-zynq7/` and can be copied to the appropriate locations on the SD card using the tool described below.
 
+### Build process using Docker image
+Conversely, it is possible to produce the SD card image with `meta-caribou` benefiting a ['Docker'](https://www.docker.com/) virtualization.
+This way, a user avoids any dependency issues between `yocto` and his host operating system. This flow requires an installation of 'Docker' in free Community Edition.
+Details can be found on Docker's webpage (e.g. [CentOS installation](https://store.docker.com/editions/community/docker-ce-server-centos)).
+
+Having 'Docker' installed locally, user runs a command below
+
+  ```
+  $ source <(curl -s https://gitlab.cern.ch/Caribou/meta-caribou/raw/master/misc/remote_scripts/build.sh)
+  ```
+The process will create in the working directory three directories:
+  * `downloads` : store of fetched sources used to build the `meta-caribou` image
+  * `sstate-cache` : store the intermediate stages of image generation
+  * `wic` : with the stored image (e.g. `sdimage-04b06ff9-mmcblk.direct`)
+
+If the command is called again in the same working directory, the process reuses `downloads` and `sstate-cache` directories what significantly increase build time.
+The image name includes a hash of a commit used to build it.
+    
+
 ### MAC address
 In order to set the MAC address of the Caribou board other than default (00:0A:35:00:01:23), one shold modify first line in the `uEnv.txt` file located on the `boot` partition of the SD card.
 
