@@ -8,7 +8,7 @@ A good starting point is following the [quick start guide](http://www.yoctoproje
 # Getting started immadeitely
 
 The most straight forward way to use the Caribou Linux distribution relies on the already built `meta-caribou` image.
- * Grab the latest [built](https://cernbox.cern.ch/remote.php/webdav/%20%20project%20caribou/www/sdimage-latest-mmcblk.zip) --- it is based on latest commit from the _master_ branch.<br />
+ * Grab the latest [built](http://project-meta-caribou.web.cern.ch/project-meta-caribou/sdimage-latest-mmcblk.zip) --- it is based on latest commit from the _master_ branch.<br />
  You can also download the other recent commits from the [webpage](http://project-meta-caribou.web.cern.ch/project-meta-caribou/).
  * Unzip the image
 
