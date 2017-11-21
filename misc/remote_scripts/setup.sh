@@ -4,7 +4,7 @@
 #However, with GIT_CI parameter, it will not clone/pull poky/meta-caribou.
 
 # get poky
-export POKY_VERSION="pyro-17.0.2"
+export POKY_VERSION="rocko-18.0.0"
 if [ ! -d poky ]; then
     git clone --branch $POKY_VERSION git://git.yoctoproject.org/poky
 else

@@ -3,8 +3,8 @@
 # It assumes that meta-caribou has been cloned to the 'poky' directory.
 # If GIT_CI, the script assumes to be called in the poky directory
 
-export XILINX_VERSION="pyro"
-export OPENEMBEDED_VERSION="pyro"
+export XILINX_VERSION="mater"
+export OPENEMBEDED_VERSION="rocko"
 
 if [ "$1" != "GIT_CI" ]; then
     SOURCE="${BASH_SOURCE[0]}"

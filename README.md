@@ -35,11 +35,11 @@ You can also build `meta-caribou` image yourself from scratch on your local mach
 
 This layer depends on:
 
- * URI: git://git.yoctoproject.org/poky tag: pyro-17.0.2
+ * URI: git://git.yoctoproject.org/poky tag: rocko-18.0.0
 
- * URI: git://git.yoctoproject.org/meta-xilinx branch: pyro
+ * URI: git://git.yoctoproject.org/meta-xilinx branch: master
 
- * URI: git://git.openembedded.org/meta-openembedded/ branch: pyro
+ * URI: git://git.openembedded.org/meta-openembedded/ branch: rocko
 
 ### Build process using a Docker container
 It is possible to produce the SD card image with `meta-caribou` benefiting a [_Docker_](https://www.docker.com/) virtualization.
