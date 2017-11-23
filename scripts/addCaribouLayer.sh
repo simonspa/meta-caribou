@@ -3,7 +3,7 @@
 # It assumes that meta-caribou has been cloned to the 'poky' directory.
 # If GIT_CI, the script assumes to be called in the poky directory
 
-export XILINX_VERSION="mater"
+export XILINX_VERSION="master"
 export OPENEMBEDED_VERSION="rocko"
 
 if [ "$1" != "GIT_CI" ]; then
