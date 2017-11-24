@@ -14,3 +14,4 @@ S = "${WORKDIR}/git/outputs/dts/"
 KERNEL_DTS_INCLUDE_caribou-zynq7 = "\
 			git/outputs/dts \
 			"		
+COMPATIBLE_MACHINE_caribou-zynq7 = ".*"
