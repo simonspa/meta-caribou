@@ -27,6 +27,7 @@ else
     git --git-dir=meta-xilinx/.git pull
     git --git-dir=meta-xilinx/.git --work-tree=meta-xilinx checkout $XILINX_VERSION
 fi
+git --git-dir=meta-xilinx/.git --work-tree=meta-xilinx checkout 2b6616ec267b766689898723a034302f87e232e6
 
 if [ ! -d meta-openembedded ]; then
     #gnuplot
