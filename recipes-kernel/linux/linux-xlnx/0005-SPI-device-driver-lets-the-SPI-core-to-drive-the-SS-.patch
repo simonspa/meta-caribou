@@ -1,8 +1,7 @@
-From 024b585b3c854a53359a914864a88dd4bcd3a2f7 Mon Sep 17 00:00:00 2001
+From ae983bedcab2461259defd3e97f9a513597a5014 Mon Sep 17 00:00:00 2001
 From: Adrian Fiergolski <adrian.fiergolski@cern.ch>
-Date: Mon, 28 Aug 2017 17:30:28 +0200
-Subject: [PATCH 5/5] SPI device driver lets the SPI core to drive the SS
- signal.
+Date: Fri, 24 Nov 2017 17:23:24 +0100
+Subject: [PATCH] SPI device driver lets the SPI core to drive the SS.
 
 Signed-off-by: Adrian Fiergolski <adrian.fiergolski@cern.ch>
 ---
@@ -10,21 +9,22 @@ Signed-off-by: Adrian Fiergolski <adrian.fiergolski@cern.ch>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/spi/spi-xilinx.c b/drivers/spi/spi-xilinx.c
-index a5431b8a3bc2..c8b635f8bc77 100644
+index 8f864e6fd995..0e646cb4dfaa 100644
 --- a/drivers/spi/spi-xilinx.c
 +++ b/drivers/spi/spi-xilinx.c
-@@ -255,9 +255,9 @@ static void xspi_init_hw(struct xilinx_spi *xspi)
+@@ -255,10 +255,10 @@ static void xspi_init_hw(struct xilinx_spi *xspi)
  	/* Deselect the slave on the SPI bus */
  	xspi->write_fn(0xffff, regs_base + XSPI_SSR_OFFSET);
  	/*
 -	 * Disable the transmitter, enable Manual Slave Select Assertion,
 +	 * Disable the transmitter,
- 	 * put SPI controller into master mode, and enable it */
+ 	 * put SPI controller into master mode, and enable it
+ 	 */
 -	xspi->write_fn(XSPI_CR_MANUAL_SSELECT |	XSPI_CR_MASTER_MODE |
-+	xspi->write_fn( XSPI_CR_MASTER_MODE |
++	xspi->write_fn(XSPI_CR_MASTER_MODE |
  		XSPI_CR_ENABLE | XSPI_CR_TXFIFO_RESET |	XSPI_CR_RXFIFO_RESET,
  		regs_base + XSPI_CR_OFFSET);
  }
 -- 
-2.11.0
+2.14.1
 

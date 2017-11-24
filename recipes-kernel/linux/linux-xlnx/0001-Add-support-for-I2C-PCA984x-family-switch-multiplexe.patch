@@ -1,18 +1,18 @@
-From d5ee63a2ede6581583247250a888725c3099e079 Mon Sep 17 00:00:00 2001
+From 21de2577a625d713991e462ad033389f13693f89 Mon Sep 17 00:00:00 2001
 From: Adrian Fiergolski <adrian.fiergolski@cern.ch>
-Date: Mon, 28 Aug 2017 17:09:15 +0200
-Subject: [PATCH 1/5] Add support for I2C PCA984x family (switch/multiplexers).
+Date: Fri, 24 Nov 2017 17:16:20 +0100
+Subject: [PATCH] Add support for I2C PCA984x family (switch/multiplexers).
 
 Signed-off-by: Adrian Fiergolski <adrian.fiergolski@cern.ch>
 ---
  .../{i2c-mux-pca954x.txt => i2c-mux-pca9x4x.txt}   |   3 +-
  drivers/i2c/muxes/Makefile                         |   2 +-
  drivers/i2c/muxes/i2c-mux-pca9541.c                |   4 +-
- .../muxes/{i2c-mux-pca954x.c => i2c-mux-pca9x4x.c} | 254 ++++++++++++++++-----
+ .../muxes/{i2c-mux-pca954x.c => i2c-mux-pca9x4x.c} | 297 ++++++++++++++++-----
  include/linux/i2c/{pca954x.h => pca9x4x.h}         |  13 +-
- 5 files changed, 213 insertions(+), 63 deletions(-)
+ 5 files changed, 236 insertions(+), 83 deletions(-)
  rename Documentation/devicetree/bindings/i2c/{i2c-mux-pca954x.txt => i2c-mux-pca9x4x.txt} (90%)
- rename drivers/i2c/muxes/{i2c-mux-pca954x.c => i2c-mux-pca9x4x.c} (51%)
+ rename drivers/i2c/muxes/{i2c-mux-pca954x.c => i2c-mux-pca9x4x.c} (56%)
  rename include/linux/i2c/{pca954x.h => pca9x4x.h} (82%)
 
 diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.txt b/Documentation/devicetree/bindings/i2c/i2c-mux-pca9x4x.txt
@@ -68,10 +68,10 @@ index 4ea7e691afc7..31fb32256ac6 100644
  	struct pca9541 *data;
  	int force;
 diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca9x4x.c
-similarity index 51%
+similarity index 56%
 rename from drivers/i2c/muxes/i2c-mux-pca954x.c
 rename to drivers/i2c/muxes/i2c-mux-pca9x4x.c
-index 8bc3d36d2837..0be80f597bd0 100644
+index 4fe44e697604..49405c30dc2a 100644
 --- a/drivers/i2c/muxes/i2c-mux-pca954x.c
 +++ b/drivers/i2c/muxes/i2c-mux-pca9x4x.c
 @@ -1,14 +1,16 @@
@@ -92,30 +92,34 @@ index 8bc3d36d2837..0be80f597bd0 100644
   *
   * These chips are all controlled via the I2C bus itself, and all have a
   * single 8-bit register. The upstream "parent" bus fans out to two,
-@@ -39,14 +41,20 @@
+@@ -39,7 +41,7 @@
  #include <linux/gpio/consumer.h>
  #include <linux/i2c.h>
  #include <linux/i2c-mux.h>
 -#include <linux/i2c/pca954x.h>
 +#include <linux/i2c/pca9x4x.h>
+ #include <linux/interrupt.h>
+ #include <linux/irq.h>
  #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
- #include <linux/pm.h>
+@@ -50,10 +52,16 @@
  #include <linux/slab.h>
+ #include <linux/spinlock.h>
  
 -#define PCA954X_MAX_NCHANS 8
 +#define PCA9X4X_MAX_NCHANS 8
-+
+ 
+ #define PCA954X_IRQ_OFFSET 4
+ 
 +//PCA984x family I2C other addresses
 +#define GENERAL_CALL  0x00
 +#define SOFTWARE_RESET 0x06
 +#define DEVICE_ID_ADDRESS 0x7C
 +#define NXP_ID 0x00
- 
++
  enum pca_type {
  	pca_9540,
-@@ -57,18 +65,24 @@ enum pca_type {
+ 	pca_9542,
+@@ -63,6 +71,12 @@ enum pca_type {
  	pca_9546,
  	pca_9547,
  	pca_9548,
@@ -124,11 +128,13 @@ index 8bc3d36d2837..0be80f597bd0 100644
 +	pca_9847,
 +	pca_9848,
 +	pca_9849,
++	
  };
  
  struct chip_desc {
- 	u8 nchans;
+@@ -70,12 +84,13 @@ struct chip_desc {
  	u8 enable;	/* used for muxes only */
+ 	u8 has_irq;
  	enum muxtype {
 -		pca954x_ismux = 0,
 -		pca954x_isswi
@@ -143,8 +149,8 @@ index 8bc3d36d2837..0be80f597bd0 100644
  	const struct chip_desc *chip;
  
  	u8 last_chan;		/* last register value */
-@@ -76,39 +90,66 @@ struct pca954x {
- 	struct i2c_client *client;
+@@ -87,51 +102,79 @@ struct pca954x {
+ 	raw_spinlock_t lock;
  };
  
 -/* Provide specs for the PCA954x types we know about */
@@ -157,18 +163,33 @@ index 8bc3d36d2837..0be80f597bd0 100644
 -		.muxtype = pca954x_ismux,
 +		.muxtype = pca9x4x_ismux,
  	},
+ 	[pca_9542] = {
+ 		.nchans = 2,
+ 		.enable = 0x4,
+ 		.has_irq = 1,
+-		.muxtype = pca954x_ismux,
++		.muxtype = pca9x4x_ismux,
+ 	},
  	[pca_9543] = {
  		.nchans = 2,
+ 		.has_irq = 1,
 -		.muxtype = pca954x_isswi,
 +		.muxtype = pca9x4x_isswi,
  	},
  	[pca_9544] = {
  		.nchans = 4,
  		.enable = 0x4,
+ 		.has_irq = 1,
 -		.muxtype = pca954x_ismux,
 +		.muxtype = pca9x4x_ismux,
  	},
  	[pca_9545] = {
+ 		.nchans = 4,
+ 		.has_irq = 1,
+-		.muxtype = pca954x_isswi,
++		.muxtype = pca9x4x_isswi,
+ 	},
+ 	[pca_9546] = {
  		.nchans = 4,
 -		.muxtype = pca954x_isswi,
 +		.muxtype = pca9x4x_isswi,
@@ -196,31 +217,30 @@ index 8bc3d36d2837..0be80f597bd0 100644
 +		.nchans = 8,
 +		.muxtype = pca9x4x_ismux,
 +		.deviceID = 0x108,
-+	},
+ 	},
 +
 +	[pca_9848] = {
 +		.nchans = 8,
 +		.muxtype = pca9x4x_isswi,
 +		.deviceID = 0x10A,
- 	},
++ 	},
 +
 +	[pca_9849] = {
 +		.nchans = 4,
 +		.muxtype = pca9x4x_ismux,
 +		.deviceID = 0x109,
 +	},	
++	
  };
  
 -static const struct i2c_device_id pca954x_id[] = {
--	{ "pca9540", pca_9540 },
 +static const struct i2c_device_id pca9x4x_id[] = {
 +        //954x family
-+        { "pca9540", pca_9540 },
- 	{ "pca9542", pca_9540 },
+ 	{ "pca9540", pca_9540 },
+ 	{ "pca9542", pca_9542 },
  	{ "pca9543", pca_9543 },
- 	{ "pca9544", pca_9544 },
-@@ -116,12 +157,20 @@ static const struct i2c_device_id pca954x_id[] = {
- 	{ "pca9546", pca_9545 },
+@@ -140,12 +183,20 @@ static const struct i2c_device_id pca954x_id[] = {
+ 	{ "pca9546", pca_9546 },
  	{ "pca9547", pca_9547 },
  	{ "pca9548", pca_9548 },
 +
@@ -242,10 +262,11 @@ index 8bc3d36d2837..0be80f597bd0 100644
  	{ .compatible = "nxp,pca9540", .data = &chips[pca_9540] },
  	{ .compatible = "nxp,pca9542", .data = &chips[pca_9542] },
  	{ .compatible = "nxp,pca9543", .data = &chips[pca_9543] },
-@@ -130,13 +179,20 @@ static const struct of_device_id pca954x_of_match[] = {
+@@ -154,6 +205,14 @@ static const struct of_device_id pca954x_of_match[] = {
  	{ .compatible = "nxp,pca9546", .data = &chips[pca_9546] },
  	{ .compatible = "nxp,pca9547", .data = &chips[pca_9547] },
  	{ .compatible = "nxp,pca9548", .data = &chips[pca_9548] },
++
 +
 +	//984x family	
 +	{ .compatible = "nxp,pca9846", .data = &chips[pca_9846] },
@@ -255,7 +276,8 @@ index 8bc3d36d2837..0be80f597bd0 100644
 +	
  	{}
  };
- #endif
+ MODULE_DEVICE_TABLE(of, pca954x_of_match);
+@@ -161,7 +220,7 @@ MODULE_DEVICE_TABLE(of, pca954x_of_match);
  
  /* Write to mux register. Don't use i2c_transfer()/i2c_smbus_xfer()
     for this as they will try to lock adapter a second time */
@@ -264,7 +286,7 @@ index 8bc3d36d2837..0be80f597bd0 100644
  			     struct i2c_client *client, u8 val)
  {
  	int ret = -ENODEV;
-@@ -162,32 +218,32 @@ static int pca954x_reg_write(struct i2c_adapter *adap,
+@@ -190,32 +249,32 @@ static int pca954x_reg_write(struct i2c_adapter *adap,
  	return ret;
  }
  
@@ -289,7 +311,7 @@ index 8bc3d36d2837..0be80f597bd0 100644
  	if (data->last_chan != regval) {
 -		ret = pca954x_reg_write(muxc->parent, client, regval);
 +		ret = pca9x4x_reg_write(muxc->parent, client, regval);
- 		data->last_chan = ret ? 0 : regval;
+ 		data->last_chan = ret < 0 ? 0 : regval;
  	}
  
  	return ret;
@@ -303,14 +325,100 @@ index 8bc3d36d2837..0be80f597bd0 100644
  	struct i2c_client *client = data->client;
  
  	if (!(data->deselect & (1 << chan)))
-@@ -195,23 +251,100 @@ static int pca954x_deselect_mux(struct i2c_mux_core *muxc, u32 chan)
+@@ -223,12 +282,12 @@ static int pca954x_deselect_mux(struct i2c_mux_core *muxc, u32 chan)
  
  	/* Deselect active channel */
  	data->last_chan = 0;
 -	return pca954x_reg_write(muxc->parent, client, data->last_chan);
 +	return pca9x4x_reg_write(muxc->parent, client, data->last_chan);
-+}
-+
+ }
+ 
+-static irqreturn_t pca954x_irq_handler(int irq, void *dev_id)
++static irqreturn_t pca9x4x_irq_handler(int irq, void *dev_id)
+ {
+-	struct pca954x *data = dev_id;
++	struct pca9x4x *data = dev_id;
+ 	unsigned int child_irq;
+ 	int ret, i, handled = 0;
+ 
+@@ -246,9 +305,9 @@ static irqreturn_t pca954x_irq_handler(int irq, void *dev_id)
+ 	return handled ? IRQ_HANDLED : IRQ_NONE;
+ }
+ 
+-static void pca954x_irq_mask(struct irq_data *idata)
++static void pca9x4x_irq_mask(struct irq_data *idata)
+ {
+-	struct pca954x *data = irq_data_get_irq_chip_data(idata);
++	struct pca9x4x *data = irq_data_get_irq_chip_data(idata);
+ 	unsigned int pos = idata->hwirq;
+ 	unsigned long flags;
+ 
+@@ -261,9 +320,9 @@ static void pca954x_irq_mask(struct irq_data *idata)
+ 	raw_spin_unlock_irqrestore(&data->lock, flags);
+ }
+ 
+-static void pca954x_irq_unmask(struct irq_data *idata)
++static void pca9x4x_irq_unmask(struct irq_data *idata)
+ {
+-	struct pca954x *data = irq_data_get_irq_chip_data(idata);
++	struct pca9x4x *data = irq_data_get_irq_chip_data(idata);
+ 	unsigned int pos = idata->hwirq;
+ 	unsigned long flags;
+ 
+@@ -276,23 +335,23 @@ static void pca954x_irq_unmask(struct irq_data *idata)
+ 	raw_spin_unlock_irqrestore(&data->lock, flags);
+ }
+ 
+-static int pca954x_irq_set_type(struct irq_data *idata, unsigned int type)
++static int pca9x4x_irq_set_type(struct irq_data *idata, unsigned int type)
+ {
+ 	if ((type & IRQ_TYPE_SENSE_MASK) != IRQ_TYPE_LEVEL_LOW)
+ 		return -EINVAL;
+ 	return 0;
+ }
+ 
+-static struct irq_chip pca954x_irq_chip = {
+-	.name = "i2c-mux-pca954x",
+-	.irq_mask = pca954x_irq_mask,
+-	.irq_unmask = pca954x_irq_unmask,
+-	.irq_set_type = pca954x_irq_set_type,
++static struct irq_chip pca9x4x_irq_chip = {
++	.name = "i2c-mux-pca9x4x",
++	.irq_mask = pca9x4x_irq_mask,
++	.irq_unmask = pca9x4x_irq_unmask,
++	.irq_set_type = pca9x4x_irq_set_type,
+ };
+ 
+-static int pca954x_irq_setup(struct i2c_mux_core *muxc)
++static int pca9x4x_irq_setup(struct i2c_mux_core *muxc)
+ {
+-	struct pca954x *data = i2c_mux_priv(muxc);
++	struct pca9x4x *data = i2c_mux_priv(muxc);
+ 	struct i2c_client *client = data->client;
+ 	int c, err, irq;
+ 
+@@ -310,14 +369,14 @@ static int pca954x_irq_setup(struct i2c_mux_core *muxc)
+ 	for (c = 0; c < data->chip->nchans; c++) {
+ 		irq = irq_create_mapping(data->irq, c);
+ 		irq_set_chip_data(irq, data);
+-		irq_set_chip_and_handler(irq, &pca954x_irq_chip,
++		irq_set_chip_and_handler(irq, &pca9x4x_irq_chip,
+ 			handle_simple_irq);
+ 	}
+ 
+ 	err = devm_request_threaded_irq(&client->dev, data->client->irq, NULL,
+-					pca954x_irq_handler,
++					pca9x4x_irq_handler,
+ 					IRQF_ONESHOT | IRQF_SHARED,
+-					"pca954x", data);
++					"pca9x4x", data);
+ 	if (err)
+ 		goto err_req_irq;
+ 
+@@ -334,20 +393,97 @@ static int pca954x_irq_setup(struct i2c_mux_core *muxc)
+ 	return err;
+ }
+ 
 +/*
 + * Part of probe function specific for pca954x family
 + */
@@ -386,8 +494,8 @@ index 8bc3d36d2837..0be80f597bd0 100644
 +  }
 +
 +  return 0;
- }
- 
++}
++
  /*
   * I2C init/probing/exit functions
   */
@@ -408,7 +516,7 @@ index 8bc3d36d2837..0be80f597bd0 100644
  	const struct of_device_id *match;
  	int ret;
  
-@@ -219,8 +352,8 @@ static int pca954x_probe(struct i2c_client *client,
+@@ -355,8 +491,8 @@ static int pca954x_probe(struct i2c_client *client,
  		return -ENODEV;
  
  	muxc = i2c_mux_alloc(adap, &client->dev,
@@ -419,7 +527,7 @@ index 8bc3d36d2837..0be80f597bd0 100644
  	if (!muxc)
  		return -ENOMEM;
  	data = i2c_mux_priv(muxc);
-@@ -233,16 +366,31 @@ static int pca954x_probe(struct i2c_client *client,
+@@ -369,16 +505,31 @@ static int pca954x_probe(struct i2c_client *client,
  	if (IS_ERR(gpio))
  		return PTR_ERR(gpio);
  
@@ -459,7 +567,16 @@ index 8bc3d36d2837..0be80f597bd0 100644
  	if (match)
  		data->chip = of_device_get_match_data(&client->dev);
  	else
-@@ -284,7 +432,7 @@ static int pca954x_probe(struct i2c_client *client,
+@@ -389,7 +540,7 @@ static int pca954x_probe(struct i2c_client *client,
+ 	idle_disconnect_dt = of_node &&
+ 		of_property_read_bool(of_node, "i2c-mux-idle-disconnect");
+ 
+-	ret = pca954x_irq_setup(muxc);
++	ret = pca9x4x_irq_setup(muxc);
+ 	if (ret)
+ 		goto fail_del_adapters;
+ 
+@@ -424,7 +575,7 @@ static int pca954x_probe(struct i2c_client *client,
  
  	dev_info(&client->dev,
  		 "registered %d multiplexed busses for I2C %s %s\n",
@@ -468,7 +585,7 @@ index 8bc3d36d2837..0be80f597bd0 100644
  				? "mux" : "switch", client->name);
  
  	return 0;
-@@ -294,7 +442,7 @@ static int pca954x_probe(struct i2c_client *client,
+@@ -434,10 +585,10 @@ static int pca954x_probe(struct i2c_client *client,
  	return ret;
  }
  
@@ -476,8 +593,12 @@ index 8bc3d36d2837..0be80f597bd0 100644
 +static int pca9x4x_remove(struct i2c_client *client)
  {
  	struct i2c_mux_core *muxc = i2c_get_clientdata(client);
+-	struct pca954x *data = i2c_mux_priv(muxc);
++	struct pca9x4x *data = i2c_mux_priv(muxc);
+ 	int c, irq;
  
-@@ -303,32 +451,32 @@ static int pca954x_remove(struct i2c_client *client)
+ 	if (data->irq) {
+@@ -453,32 +604,32 @@ static int pca954x_remove(struct i2c_client *client)
  }
  
  #ifdef CONFIG_PM_SLEEP
@@ -572,5 +693,5 @@ index 1712677d5904..2aa3f947bad4 100644
  };
  
 -- 
-2.11.0
+2.14.1
 
