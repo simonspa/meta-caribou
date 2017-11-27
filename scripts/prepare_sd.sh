@@ -2,6 +2,7 @@
 
 SD_DEVICE_DEFAULT="/dev/mmcblk0"
 DEVICE_NAME_DEFAULT="pclcd-zynq"
+IMAGE_NAME=caribou-image
 
 #Colours
 ORANGE='\033[0;33m'
@@ -18,7 +19,7 @@ cd ../../
 bitbake wic-tools
 
 #Create image
-IMAGE_PATH=$PWD/$( basename $( wic create sdimage-bootpart -e caribou-image 2>&1 | tee /dev/tty | grep "INFO: The new image(s) can be found here:" -A1 | sed -n '2p' ) )
+IMAGE_PATH=$PWD/$( basename $( wic create sdimage-bootpart -e ${IMAGE_NAME} 2>&1 | tee /dev/tty | grep "INFO: The new image(s) can be found here:" -A1 | sed -n '2p' ) )
 
 #Copy image to the SD card
 read -p "Please enter absolute path SD card device [$SD_DEVICE_DEFAULT]: " SD_DEVICE
