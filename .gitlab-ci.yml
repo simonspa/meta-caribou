@@ -5,7 +5,7 @@ stages:
 
 variables:
   WIC_ZIP_PATH: '${CI_PROJECT_DIR}/wic'
-  EOS_PATH: '/eos/project/c/caribou/www/'
+  EOS_PATH: '/eos/project/c/caribou/www/project-meta-caribou/'
   
 build:
   stage: build
