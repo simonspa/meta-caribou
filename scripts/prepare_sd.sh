@@ -25,7 +25,7 @@ IMAGE_PATH=$PWD/$( basename $( wic create sdimage-bootpart -e ${IMAGE_NAME} 2>&1
 read -p "Please enter absolute path SD card device [$SD_DEVICE_DEFAULT]: " SD_DEVICE
 SD_DEVICE=${SD_DEVICE:-$SD_DEVICE_DEFAULT}
 #Get device name
-read -p "Please enter the target deivce name from list: pclcd-lab-zynq, pclcd-testbeam-zynq, pclcd-zynqX [pclcd-lab-zynq]: " DEVICE_NAME
+read -p "Please enter the target deivce name from list: pclcd-lab-zynq, pclcd-testbeam-zynq, pclcd-zynqX [$DEVICE_NAME_DEFAULT]: " DEVICE_NAME
 DEVICE_NAME=${DEVICE_NAME:-$DEVICE_NAME_DEFAULT}
 if sudo dd if=${IMAGE_PATH} of=$SD_DEVICE bs=1M ; then
     #Wait till dd finishes
