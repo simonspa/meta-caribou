@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SD_DEVICE_DEFAULT="/dev/mmcblk0"
-DEVICE_NAME_DEFAULT="pclcd-zynq"
+DEVICE_NAME_DEFAULT="pclcd-zynq0"
 IMAGE_NAME=caribou-image
 
 #Colours
