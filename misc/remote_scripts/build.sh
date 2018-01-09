@@ -10,11 +10,17 @@ export DOCKER_CONTAINER=meta-caribou-container
 
 docker pull gitlab-registry.cern.ch/caribou/meta-caribou
 if [ ! -d downloads ]; then
-    mkdir downloads
+    mkdir -m a+rw downloads
+elif [ `stat -c %A  downloads | sed 's/.\{7\}\(..\)./\1/'` != "rw" ]; then
+    echo "ERROR: The existing downloads directory needs to give read and write access to all users"
+    exit 1
 fi
 
 if [ ! -d sstate-cache ]; then
-    mkdir sstate-cache
+    mkdir -m a+rw sstate-cache
+elif [ `stat -c %A  sstate-cache | sed 's/.\{7\}\(..\)./\1/'` != "rw" ]; then 
+    echo "ERROR: The existing 'sstate-cache' directory needs to give read and write access to all users"
+    exit 1
 fi
 
 if [ ! "$(docker ps -q -f name=${DOCKER_CONTAINER})" ]; then
