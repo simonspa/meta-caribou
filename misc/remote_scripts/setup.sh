@@ -4,7 +4,7 @@
 #However, with GIT_CI parameter, it will not clone/pull poky/meta-caribou.
 
 # get poky
-export POKY_VERSION="rocko-18.0.0"
+export POKY_VERSION="rocko"
 if [ ! -d poky ]; then
     git clone --branch $POKY_VERSION git://git.yoctoproject.org/poky
 else
@@ -12,17 +12,6 @@ else
     git --git-dir=poky/.git --work-tree=poky checkout $POKY_VERSION
     git --git-dir=poky/.git --work-tree=poky reset --hard
 fi
-
-###patch wic
-patch=$(mktemp /tmp/poky-setup.XXX)
-curl -s https://gitlab.cern.ch/Caribou/meta-caribou/raw/master/misc/remote_scripts/0001-wic-Fix-a-path-to-a-psuedo-state-directory-PSEUDO_LO.patch > "$patch"
-cd poky
-git config user.name "caribou-ci"
-git config user.email "caribou-ci@cern.ch"
-git am "$patch"
-cd $OLDPWD
-rm "$patch"
-###
 
 #get meta-caribou
 if [ "$1" != "GIT_CI" ]; then

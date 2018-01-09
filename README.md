@@ -35,7 +35,7 @@ You can also build `meta-caribou` image yourself from scratch on your local mach
 
 This layer depends on:
 
- * URI: git://git.yoctoproject.org/poky tag: rocko-18.0.0
+ * URI: git://git.yoctoproject.org/poky branch: rocko
 
  * URI: git://git.yoctoproject.org/meta-xilinx branch: master
 
