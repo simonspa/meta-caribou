@@ -37,7 +37,7 @@ This layer depends on:
 
  * URI: git://git.yoctoproject.org/poky branch: rocko
 
- * URI: git://git.yoctoproject.org/meta-xilinx branch: master
+ * URI: git://git.yoctoproject.org/meta-xilinx branch: rocko
 
  * URI: git://git.openembedded.org/meta-openembedded/ branch: rocko
 
