@@ -8,6 +8,7 @@ IMAGE_NAME=caribou-image
 ORANGE='\033[0;33m'
 GREEN='\033[0;32m'
 RED="\033[0;31m"
+BLUE="\033[0;34m"
 NC='\033[0m'
 
 cd ../../
@@ -29,16 +30,29 @@ SD_DEVICE=${SD_DEVICE:-$SD_DEVICE_DEFAULT}
 read -p "Please enter the target device name from list: pclcd-lab-zynq, pclcd-testbeam-zynq, pclcd-zynqX [$DEVICE_NAME_DEFAULT]: " DEVICE_NAME
 DEVICE_NAME=${DEVICE_NAME:-$DEVICE_NAME_DEFAULT}
 
+#   Unmounting and deleting existing partitions
+#   on the SD card avoids problems when writing
+#   images multiple times.
+
+# Unmount all partitions of the device
+sudo umount ${SD_DEVICE}*
+
+# Delete all partitions
+sudo wipefs -a $SD_DEVICE
+
 if sudo dd if=${IMAGE_PATH} of=$SD_DEVICE bs=1M ; then
     # Wait until dd finishes
     printf "${ORANGE}Waiting for copying process to complete...\n"
     sudo sync
 
-    printf "${GREEN}Copying process succeeded.\n"
+    printf "${GREEN}Copying process succeeded.\n${NC}"
 else
-    printf "${RED}Copying process failed!\n"
+    printf "${RED}Copying process failed!\n${NC}"
     exit 1
 fi
+
+# refresh device list /dev:
+sudo /usr/sbin/partprobe
 
 # Figure out boot partition name:
 if [ -e "${SD_DEVICE}p1" ]; then
@@ -46,7 +60,7 @@ if [ -e "${SD_DEVICE}p1" ]; then
 elif [ -e "${SD_DEVICE}1" ]; then
     SD_DEVICE_BOOT_PARTITION=${SD_DEVICE}1
 else
-    printf "${RED}Could not find boot partition on device ${SD_DEVICE}.\n"
+    printf "${RED}Could not find boot partition on device ${SD_DEVICE}.\n${NC}"
     exit 1
 fi
 printf "${ORANGE}Found boot partition at ${SD_DEVICE_BOOT_PARTITION}${NC}\n"
@@ -68,11 +82,18 @@ case "$DEVICE_NAME" in
 			exit 1;;
 esac
 
-echo "ethaddr=${mac}" >> boot/uEnv.txt
+#printf "${BLUE}\n boot/uEnv.txt before echo:\n${NC}"
+#cat boot/uEnv.txt
+#echo "ethaddr=${mac}" >> boot/uEnv.txt
+#printf "${BLUE}\n boot/uEnv.txt after echo:\n${NC}"
+#cat boot/uEnv.txt
+#printf "${NC}\n"
+
+# Make sure SD is not busy when unmounting:
+sudo sync
 sudo umount boot
 rm -R boot
 rm $IMAGE_PATH
 
 printf "${GREEN}Finished SD card preparation."
 printf "${NC}\n"
-
