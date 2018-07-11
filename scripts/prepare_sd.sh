@@ -82,12 +82,7 @@ case "$DEVICE_NAME" in
 			exit 1;;
 esac
 
-#printf "${BLUE}\n boot/uEnv.txt before echo:\n${NC}"
-#cat boot/uEnv.txt
-#echo "ethaddr=${mac}" >> boot/uEnv.txt
-#printf "${BLUE}\n boot/uEnv.txt after echo:\n${NC}"
-#cat boot/uEnv.txt
-#printf "${NC}\n"
+echo "ethaddr=${mac}" >> boot/uEnv.txt
 
 # Make sure SD is not busy when unmounting:
 sudo sync
