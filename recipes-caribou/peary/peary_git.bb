@@ -23,6 +23,10 @@ EXTRA_OECMAKE = " -DBUILD_example=ON \
 		  -DBUILD_server=ON \
 	       "
 FILES_${PN}  += "${FILES_SOLIBSDEV}"
+FILES_${PN}  += "/usr/lib/systemd/system/pearyd.service"
+FILES_${PN}  += "/usr/lib/systemd/user/pearyd.service"
+FILES_${PN}  += "/usr/etc/pearyd.conf"
+
 FILES_${PN}-dev = ""
 
 INSANE_SKIP_${PN} = "dev-so"
