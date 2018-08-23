@@ -52,7 +52,7 @@ else
 fi
 
 # refresh device list /dev:
-sudo /usr/sbin/partprobe
+sudo partprobe
 
 # Figure out boot partition name:
 if [ -e "${SD_DEVICE}p1" ]; then
