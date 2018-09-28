@@ -17,6 +17,7 @@ DEPENDS = "i2c-tools readline"
 
 # Specify any options you want to pass to cmake using EXTRA_OECMAKE:
 EXTRA_OECMAKE = " -DBUILD_example=ON \
+		  -DBUILD_ATLASPixp2=ON \
 	          -DINSTALL_PREFIX=/usr/ \
 		  -DCMAKE_SKIP_RPATH=ON \
 		  -DCMAKE_BUILD_TYPE=Release \
