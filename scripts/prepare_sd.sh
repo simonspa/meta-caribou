@@ -13,6 +13,14 @@ NC='\033[0m'
 
 cd ../../
 
+#Copy image to the SD card
+read -p "Please enter absolute path SD card device [$SD_DEVICE_DEFAULT]: " SD_DEVICE
+SD_DEVICE=${SD_DEVICE:-$SD_DEVICE_DEFAULT}
+
+# Get device name
+read -p "Please enter the target device name from list: pclcd-lab-zynq, pclcd-testbeam-zynq, pclcd-zynqX [$DEVICE_NAME_DEFAULT]: " DEVICE_NAME
+DEVICE_NAME=${DEVICE_NAME:-$DEVICE_NAME_DEFAULT}
+
 #Set up bitbake
 . oe-init-build-env ""
 
@@ -22,14 +30,6 @@ bitbake wic-tools
 #Create image
 IMAGE_PATH=$PWD/$( basename $( wic create sdimage-bootpart -e ${IMAGE_NAME} 2>&1 | tee /dev/tty | grep "INFO: The new image(s) can be found here:" -A1 | sed -n '2p' ) )
 
-#Copy image to the SD card
-read -p "Please enter absolute path SD card device [$SD_DEVICE_DEFAULT]: " SD_DEVICE
-SD_DEVICE=${SD_DEVICE:-$SD_DEVICE_DEFAULT}
-
-# Get device name
-read -p "Please enter the target device name from list: pclcd-lab-zynq, pclcd-testbeam-zynq, pclcd-zynqX [$DEVICE_NAME_DEFAULT]: " DEVICE_NAME
-DEVICE_NAME=${DEVICE_NAME:-$DEVICE_NAME_DEFAULT}
-
 #   Unmounting and deleting existing partitions
 #   on the SD card avoids problems when writing
 #   images multiple times.
@@ -38,8 +38,9 @@ DEVICE_NAME=${DEVICE_NAME:-$DEVICE_NAME_DEFAULT}
 sudo umount ${SD_DEVICE}*
 
 # Delete all partitions
-sudo wipefs -a $SD_DEVICE
+sudo wipefs --force -a $SD_DEVICE
 
+printf "${ORANGE}Writing SD image from ${IMAGE_PATH} to $SD_DEVICE\n"
 if sudo dd if=${IMAGE_PATH} of=$SD_DEVICE bs=1M ; then
     # Wait until dd finishes
     printf "${ORANGE}Waiting for copying process to complete...\n"
