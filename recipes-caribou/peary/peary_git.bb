@@ -27,6 +27,6 @@ FILES_${PN}  += "${FILES_SOLIBSDEV}"
 FILES_${PN} += "${libdir}/*"
 FILES_${PN} += "usr/etc/*"
 
-FILES_${PN}-dev = ""
+FILES_${PN}-dev = "usr/include/*"
 
 INSANE_SKIP_${PN} = "dev-so"
