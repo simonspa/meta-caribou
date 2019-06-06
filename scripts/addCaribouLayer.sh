@@ -35,13 +35,15 @@ else
     git --git-dir=meta-openembedded/.git pull
     git --git-dir=meta-openembedded/.git --work-tree=meta-openembedded checkout $OPENEMBEDED_VERSION
 fi
-    
+
 
 #Set up bitbake
 . oe-init-build-env ""
 bitbake-layers add-layer ../meta-xilinx/meta-xilinx-bsp
 bitbake-layers add-layer ../meta-xilinx/meta-xilinx-contrib
 bitbake-layers add-layer ..//meta-openembedded/meta-oe
+bitbake-layers add-layer ..//meta-openembedded/meta-python
+bitbake-layers add-layer ..//meta-openembedded/meta-networking
 bitbake-layers add-layer ../meta-caribou
 sed -i 's/^MACHINE ??= ".*"/MACHINE ??= "caribou-zynq7"/' conf/local.conf
 
