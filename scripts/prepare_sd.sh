@@ -52,6 +52,8 @@ else
     exit 1
 fi
 
+sleep 3
+
 # refresh device list /dev:
 sudo partprobe
 
@@ -87,6 +89,7 @@ echo "ethaddr=${mac}" >> boot/uEnv.txt
 
 # Make sure SD is not busy when unmounting:
 sudo sync
+sleep 3
 sudo umount boot
 rm -R boot
 rm $IMAGE_PATH
